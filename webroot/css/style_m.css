@@ -1,0 +1,200 @@
+﻿@charset "utf-8";
+@media (max-width: 999px) {
+  body {
+    font-size: 12px;
+    background: #f0e6fb url(../img/bj.jpg) center bottom no-repeat;
+  }
+  input,
+  select,
+  textarea {
+    font-size: 12px;
+  }
+  .container {
+    padding: 0;
+  }
+  /* header */
+  header {
+    height: auto;
+    padding: 10px;
+    display: block;
+    overflow: hidden;
+    text-align: center;
+  }
+  header .logo img {
+    height: 60px;
+  }
+  header .tips {
+    display: inline-block;
+    font-size: 12px;
+    padding: 5px 10px;
+    margin-top: 8px;
+    border-radius: 3px;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.5);
+  }
+  /* wap */
+  .wap_hide {
+    display: none;
+  }
+  .wap_show {
+    display: block;
+  }
+  /* jiang */
+  .jiang {
+    border-radius: 6px;
+    margin: 10px;
+  }
+  .jiang .tab:before {
+    height: 1px;
+  }
+  .jiang .tab li {
+    height: 40px;
+    line-height: 40px;
+    border-bottom-width: 1px;
+    font-size: 16px;
+  }
+  .jiang .tab li:before {
+    border-width: 5px;
+  }
+  .jiang .flex_main {
+    display: block;
+    padding: 10px;
+  }
+  .jiang .flex_main .line {
+    width: 100%;
+    height: 1px;
+    margin: 10px 0;
+  }
+  .jiang .flex_main .info {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+  }
+  .jiang .flex_main .info .left img {
+    height: 64px;
+  }
+  .jiang .flex_main .info .right {
+    padding: 0 0 0 20px;
+  }
+  .jiang .flex_main .info .bt {
+    font-size: 16px;
+  }
+  .jiang .flex_main .info .qis_but {
+    width: 150px;
+    margin-top: 10px;
+  }
+  .jiang .flex_main .date {
+    font-size: 16px;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+  }
+  .jiang .flex_main .date dl {
+    font-size: 20px;
+  }
+  .jiang .flex_main .date dl dd {
+    width: 18px;
+    line-height: 24px;
+    box-shadow: 0 1px 3px #666;
+  }
+  .jiang .flex_main .date dl dd em {
+    box-shadow: 0 0 3px #999 inset;
+  }
+  .jiang .flex_main .kai {
+    font-size: 16px;
+  }
+  .jiang .flex_main .kai dd {
+    width: 30px;
+    height: 30px;
+    line-height: 28px;
+    margin: 0 4px;
+    border: 1px solid #7f1ad5;
+    box-shadow: 0 0 5px #7f1ad5 inset;
+  }
+  /* main */
+  .main {
+    padding: 10px;
+    margin: 0 10px;
+  }
+  .main .tip {
+    padding: 15px 0 5px 0;
+    font-size: 14px;
+  }
+  .main .bj {
+    padding: 0 10px 10px 10px;
+  }
+  .main .tab:before {
+    height: 1px;
+  }
+  .main .tab li {
+    height: 40px;
+    border-bottom-width: 1px;
+    font-size: 16px;
+    padding: 4px 0 0 0;
+  }
+  .main .tab li:before {
+    border-width: 4px;
+  }
+  .main .tab li img {
+    margin-right: 2px;
+    top: 1px;
+    height: 25px;
+  }
+  .main table thead th {
+    font-size: 12px;
+    padding: 10px 5px;
+  }
+  .main table tbody td,
+  .main table tbody th {
+    padding: 10px 5px;
+  }
+  .main table tbody td .ztpic,
+  .main table tbody th .ztpic {
+    height: 16px;
+  }
+  .main table tbody td .icon,
+  .main table tbody th .icon {
+    width: auto;
+    height: 26px;
+    line-height: 24px;
+    border-radius: 20px;
+    box-shadow: 0 0 8px #7f1ad5 inset;
+    padding: 0 8px;
+  }
+  .main table tbody td .red,
+  .main table tbody th .red {
+    border: 1px solid #fe919c;
+    box-shadow: 0 0 8px #fe919c inset;
+  }
+  .main table tbody .er .icon {
+    padding: 0 8px;
+  }
+  .main table tbody th {
+    font-size: 12px;
+  }
+  .main #table_zoushi tbody td,
+  .main #table_zoushi tbody th {
+    padding: 6px 5px;
+  }
+  .main #table_jieguo,
+  .main #table_zoushi,
+  .main #table_yuce {
+    display: none;
+  }
+  /* footer */
+  footer {
+    padding: 15px 0 20px 0;
+  }
+}
