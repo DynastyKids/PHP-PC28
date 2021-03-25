@@ -15,6 +15,8 @@
 namespace App\Controller;
 
 use Cake\Core\Configure;
+use Cake\Event\Event;
+use Cake\Http\Server;
 use Cake\Http\Exception\ForbiddenException;
 use Cake\Http\Exception\NotFoundException;
 use Cake\View\Exception\MissingTemplateException;
@@ -40,6 +42,7 @@ class PagesController extends AppController
      */
     public function display(...$path)
     {
+        $this->response->withHeader('Access-Control-Allow-Origin', '*');
         if (!$path) {
             return $this->redirect('/');
         }
