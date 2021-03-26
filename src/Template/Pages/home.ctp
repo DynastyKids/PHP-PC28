@@ -3,7 +3,7 @@
 use Cake\ORM\TableRegistry;
 
 $ca_datasource = "http://144.202.119.241:9876/3.json";
-$bj_datasource = "http://yuce2.com/api/gameInfo/39/100";
+$bj_datasource = "http://144.202.119.241:9876/api/1.json";
 $ca_data = json_decode(file_get_contents($ca_datasource), true);
 $bj_data = json_decode(file_get_contents($bj_datasource), true);
 $btc_data = '';
@@ -14,11 +14,19 @@ if (date('Hi', $canext_stamp) >= 1157 && date('Hi', $canext_stamp) <= 1300) {
 }
 $canext_time = date('Y-m-d H:i:s', $canext_stamp / 1000 + 28800);
 
-$bjnext_stamp = $bj_data['data'][0]['time'] + 300000;
-if (date('Hi', $bjnext_stamp) >= 2355 && date('Hi', $bjnext_stamp) < 605) {
-    $bjnext_stamp += 25210000;
+// $bjnext_stamp = $bj_data['data'][0]['time'] + 300000;
+// if (date('Hi', $bjnext_stamp) >= 2355 && date('Hi', $bjnext_stamp) < 605) {
+//     $bjnext_stamp += 25210000;
+// }
+// $bjnext_time = date('Y-m-d H:i:s', $bjnext_stamp / 1000 + 28800);
+$bjnext_time = date_create_from_format('Y-m-d H:i:s',$bj_data['data'][0]['opentime']);
+$bjnext_stamp = $bjnext_time->getTimestamp();
+if (date('Hi', $bjnext_stamp) > 2355 && date('Hi', $bjnext_stamp) < 705) {
+    date_add($bjnext_time,date_interval_create_from_date_string('420m'));
+    $bjnext_stamp = $bjnext_time->getTimestamp();
 }
-$bjnext_time = date('Y-m-d H:i:s', $bjnext_stamp / 1000 + 28800);
+
+//debug($bjnext_stamp);
 
 // debug($bj_data['data'][0]['time']);
 // debug($bjnext_stamp);
@@ -95,14 +103,14 @@ $bjnext_time = date('Y-m-d H:i:s', $bjnext_stamp / 1000 + 28800);
                 <div class="info">
                     <div class="left"><img src="img/qi_cn.png"></div>
                     <div class="right">
-                        <div class="bt">最新：<span><?= $bj_data['data'][0]['qihao'] ?></span>期</div>
+                        <div class="bt">最新：<span><?= $bj_data['data'][0]['expect'] ?></span>期</div>
                         <div class="qis_but">
                             <div class="prev"></div>
-                            <div class="t"><?= $bj_data['data'][0]['qihao'] ?></div>
+                            <div class="t"><?= $bj_data['data'][0]['expect'] ?></div>
                             <ul>
-                                <li class="on"><?= $bj_data['data'][0]['qihao'] ?></li>
+                                <li class="on"><?= $bj_data['data'][0]['expect'] ?></li>
                                 <?php for ($i = 1; $i < 15; $i++) {
-                                    echo "<li>" . $bj_data['data'][$i]['qihao'] . "</li>";
+                                    echo "<li>" . $bj_data['data'][$i]['expect'] . "</li>";
                                 } ?>
                             </ul>
                             <div class="next"></div>
@@ -119,15 +127,27 @@ $bjnext_time = date('Y-m-d H:i:s', $bjnext_stamp / 1000 + 28800);
                     </dl>
                 </div>
                 <div class="line"></div>
+                <?php 
+                    $k_token=strtok($bj_data['data'][0]['opencode'],",");
+                    $k = explode(",",$k_token);
+                    $k0=$k1=$k2=0;
+                    for($i=0;$i<6;$i++){
+                        $k0+=$k[$i];
+                        $k1+=$k[$i+6];
+                        $k2+=$k[$i+12];
+                    }
+                    $total = $k0%10+$k1%10+$k2%10;
+                    ?>
                 <dl class="kai">
-                    <dd><?= substr($bj_data['data'][0]['kaijiang'], 0, 1) ?></dd>
+                    <dd><?= $k0%10 ?></dd>
                     <dt>+</dt>
-                    <dd><?= substr($bj_data['data'][0]['kaijiang'], 4, 1) ?></dd>
+                    <dd><?= $k1%10 ?></dd>
                     <dt>+</dt>
-                    <dd><?= substr($bj_data['data'][0]['kaijiang'], 8, 1) ?></dd>
+                    <dd><?= $k2%10 ?></dd>
                     <dt>=</dt>
-                    <dd class="zong"><?= substr($bj_data['data'][0]['kaijiang'], -2) ?></dd>
-                    <dt>（小，单）</dt>
+                    <dd class="zong"><?= $total ?></dd>
+                    <dt><?php if($total>=14){echo "（ 小 ，";} else {echo "（ 大 ，";}?>
+                    <?php if($total%2!=0){ echo "单 ）";}else{echo "双 ）";}?></dt>
                 </dl>
             </div>
         </div>
@@ -322,9 +342,20 @@ $bjnext_time = date('Y-m-d H:i:s', $bjnext_stamp / 1000 + 28800);
                     <tbody id="bjopencodelist">
                         <?php for ($i = 0; $i < 100; $i++) { ?>
                             <tr>
-                                <td><?= $bj_data['data'][$i]['qihao'] ?></td>
-                                <td><?= date('Y-m-d H:i:s', $bj_data['data'][$i]['time'] / 1000 + 28800) ?></td>
-                                <td><?= $bj_data['data'][$i]['kaijiang'] ?></td>
+                                <td><?= $bj_data['data'][$i]['expect'] ?></td>
+                                <td><?= $bj_data['data'][$i]['opentime'] ?></td>
+                                <td>
+                                <?php 
+                                    $n1=$n2=$n3=0;
+                                    $n = explode(",",$bj_data['data'][$i]['opencode']);
+                                    for ($j=0;$j<6;$j++){
+                                        $n0+=$n[$j];
+                                        $n1+=$n[$j+6];
+                                        $n2+=$n[$j+12];
+                                    }
+                                ?>
+                                <?=$n0%10?> + <?= $n1%10?> + <?= $n2%10?> = <?=$n0%10+$n1%10+$n2%10?>
+                                </td>
                             </tr>
                         <?php } ?>
                     </tbody>
@@ -352,7 +383,14 @@ $bjnext_time = date('Y-m-d H:i:s', $bjnext_stamp / 1000 + 28800);
                             <th></th>
                             <?php $ca1=$ca2=$ca3=$ca4=0;
                                 for($i = 0; $i < 100; $i++){
-                                $res = substr($bj_data['data'][$i]['kaijiang'],-2);
+                                    $k = explode(",",$bj_data['data'][$i]['opencode']);
+                                    $l0=$l1=$l2=0;
+                                    for($j=0;$j<6;$j++){
+                                        $l0+=$k[$j];
+                                        $l1+=$k[$j+6];
+                                        $l2+=$k[$j+12];
+                                    }
+                                $res = $l0%10+$l1%10+$l2%10;
                                 if($res<14){
                                     if($res%2==0){$ca2++;} 
                                     else{$ca1++;}
@@ -370,9 +408,18 @@ $bjnext_time = date('Y-m-d H:i:s', $bjnext_stamp / 1000 + 28800);
                             <th><?= $ca3?></th>
                             <th><?= $ca4?></th>
                         </tr>
-                        <?php for($i = 0; $i < 100; $i++){ $res= substr($bj_data['data'][$i]['kaijiang'],-2);?>
+                        <?php for($i = 0; $i < 100; $i++){ 
+                            $k = explode(",",$bj_data['data'][$i]['opencode']);
+                                    $l0=$l1=$l2=0;
+                                    for($j=0;$j<6;$j++){
+                                        $l0+=$k[$j];
+                                        $l1+=$k[$j+6];
+                                        $l2+=$k[$j+12];
+                                    }
+                            $res = $l0%10+$l1%10+$l2%10;
+                        ?>
                             <tr>
-                                <td><?= $bj_data['data'][$i]['qihao'] ?></td>
+                                <td><?= $bj_data['data'][$i]['expect'] ?></td>
                                 <td><?= $res; ?></td>
                                 <?php if($res>=14){
                                     echo "<td><span class='icon'>大</span></td><td></td>";
@@ -562,11 +609,11 @@ $bjnext_time = date('Y-m-d H:i:s', $bjnext_stamp / 1000 + 28800);
             document.getElementById("casec2").innerHTML = "…";
 
             // setInterval(function(){var nextdata = ***;if(nextdata!=currentdata){location.reload()}},10000);
-            setTimeout(function() {
-                if (document.getElementById("qi_jnd").style.display != "none") {
-                    location.reload()
-                };
-            }, 7500);
+            // setTimeout(function() {
+            //     if (document.getElementById("qi_jnd").style.display != "none") {
+            //         location.reload()
+            //     };
+            // }, 7500);
         }
     }, 1000);
 </script>
@@ -609,11 +656,11 @@ $bjnext_time = date('Y-m-d H:i:s', $bjnext_stamp / 1000 + 28800);
             document.getElementById("bjsec2").innerHTML = "…";
 
             // setInterval(function(){var nextdata = ***;if(nextdata!=currentdata){location.reload()}},10000);
-            setTimeout(function() {
-                if (document.getElementById("qi_bj").style.display != "none") {
-                    location.reload()
-                };
-            }, 7500);
+            // setTimeout(function() {
+            //     if (document.getElementById("qi_bj").style.display != "none") {
+            //         location.reload()
+            //     };
+            // }, 7500);
         }
     }, 1000);
 </script>
