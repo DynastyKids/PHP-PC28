@@ -26,7 +26,8 @@ if (date('Hi', $bjnext_stamp) > 2355 && date('Hi', $bjnext_stamp) < 705) {
     $bjnext_stamp = $bjnext_time->getTimestamp();
 }
 
-//debug($bjnext_stamp);
+debug($bjnext_stamp);
+$bjnext_stamp=$bjnext_stamp*1000;
 
 // debug($bj_data['data'][0]['time']);
 // debug($bjnext_stamp);
@@ -34,11 +35,14 @@ if (date('Hi', $bjnext_stamp) > 2355 && date('Hi', $bjnext_stamp) < 705) {
 
 <div class="container">
     <header>
-        <div class="logo"><img src="img/logo.png"></div>
+        <!-- <div class="logo"><img src="img/logo.png"></div> -->
+        <?= $this->Html->image('logo.png',['class'=>'logo','url'=>'/'])?>
         <div class="tips">PC28--极力打造精准北京28、加拿大28人工计划网站</div>
     </header>
-    <div class="all_pic wap_hide"><img src="img/pic_pc.jpg"></div>
-    <div class="all_pic wap_show"><img src="img/pic_wap.jpg"></div>
+    <!-- <div class="all_pic wap_hide"><img src="img/pic_pc.jpg"></div> -->
+    <?= $this->Html->image('pic_pc.jpg',['class'=>'all_pic wap_hide'])?>
+    <!-- <div class="all_pic wap_show"><img src="img/pic_wap.jpg"></div> -->
+    <?= $this->Html->image('img/pic_wap.jpg',['class'=>'all_pic wap_show'])?>
     <div class="jiang">
         <ul class="tab">
             <li class="on" data-id="qi_jnd">加拿大28</li>
@@ -346,7 +350,7 @@ if (date('Hi', $bjnext_stamp) > 2355 && date('Hi', $bjnext_stamp) < 705) {
                                 <td><?= $bj_data['data'][$i]['opentime'] ?></td>
                                 <td>
                                 <?php 
-                                    $n1=$n2=$n3=0;
+                                    $n0=$n1=$n2=0;
                                     $n = explode(",",$bj_data['data'][$i]['opencode']);
                                     for ($j=0;$j<6;$j++){
                                         $n0+=$n[$j];
