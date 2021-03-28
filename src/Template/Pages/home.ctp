@@ -1,5 +1,5 @@
 <?php
-
+// ini_set('memory_limit', '1024M');
 use Cake\ORM\TableRegistry;
 
 $ca_datasource = "http://144.202.119.241:9876/3.json";
@@ -21,12 +21,13 @@ $canext_time = date('Y-m-d H:i:s', $canext_stamp / 1000 + 28800);
 // $bjnext_time = date('Y-m-d H:i:s', $bjnext_stamp / 1000 + 28800);
 $bjnext_time = date_create_from_format('Y-m-d H:i:s',$bj_data['data'][0]['opentime']);
 $bjnext_stamp = $bjnext_time->getTimestamp();
+$bjnext_stamp+=210;
+// debug($bjnext_stamp);
+// debug(date('Y-m-d H:i:s', $bjnext_stamp));
 if (date('Hi', $bjnext_stamp) > 2355 && date('Hi', $bjnext_stamp) < 705) {
     date_add($bjnext_time,date_interval_create_from_date_string('420m'));
     $bjnext_stamp = $bjnext_time->getTimestamp();
 }
-
-debug($bjnext_stamp);
 $bjnext_stamp=$bjnext_stamp*1000;
 
 // debug($bj_data['data'][0]['time']);
@@ -132,8 +133,7 @@ $bjnext_stamp=$bjnext_stamp*1000;
                 </div>
                 <div class="line"></div>
                 <?php 
-                    $k_token=strtok($bj_data['data'][0]['opencode'],",");
-                    $k = explode(",",$k_token);
+                    $k = explode(",",$bj_data['data'][0]['opencode']);
                     $k0=$k1=$k2=0;
                     for($i=0;$i<6;$i++){
                         $k0+=$k[$i];
@@ -430,13 +430,13 @@ $bjnext_stamp=$bjnext_stamp*1000;
                                 } else{
                                     echo "<td></td><td><span class='icon'>小</span></td>";
                                 }?>
-                                <?php if($res%2==0){
+                                <?php if($res%2!=0){
                                     echo "<td><span class='icon'>单</span></td><td></td>";
                                 } else{
                                     echo "<td></td><td><span class='icon'>双</span></td>";
                                 }?>
                                 <?php if($res>=14){
-                                    if($res%2==0){
+                                    if($res%2!=0){
                                         echo "<td class='er'><span class='icon'>大单</span></td><td></td>";
                                     } else{
                                         echo "<td></td><td class='er'><span class='icon'>大双</span></td>";
@@ -444,7 +444,7 @@ $bjnext_stamp=$bjnext_stamp*1000;
                                     echo "<td></td><td></td>";
                                 } else{
                                     echo "<td></td><td></td>";
-                                    if($res%2==0){
+                                    if($res%2!=0){
                                         echo "<td class='er'><span class='icon'>小单</span></td><td></td>";
                                     } else{
                                         echo "<td></td><td class='er'><span class='icon'>小双</span></td>";
@@ -466,12 +466,46 @@ $bjnext_stamp=$bjnext_stamp*1000;
                         </tr>
                     </thead>
                     <tbody id="bjgameforecastlist">
+                    <?php $bj_predictdata = TableRegistry::getTableLocator()->get('bj')->find()->orderDesc('id')->limit(110)->toArray(); ?>
                         <tr>
-                            <td>977582</td>
+                            <td><?= $bj_data['data'][0]['expect']+1?></td>
                             <td>--- 预测仅供参考 ---</td>
-                            <td>单丨大</td>
+                            <td>
+                            <?php if($bj_predictdata[0]['size'] == 1){echo "大 | ";} else {echo "小 | ";}?>
+                            <?php if($bj_predictdata[0]['odd'] == 1){echo "单";} else {echo "双";}?>
                             <td></td>
                         </tr>
+                    <?php for($i=1;$i<100;$i++){?>
+                        <tr>
+                            <td><?= $bj_data['data'][$i]['expect']?></td>
+                            <?php
+                                $k=explode(",",$bj_data['data'][$i]['opencode']);
+                                $k0=$k1=$k2=0;
+                                for($j=0;$j<6;$j++){
+                                    $k0+=$k[$j];
+                                    $k1+=$k[$j+6];
+                                    $k2+=$k[$j+12];
+                                }
+                                $res=$k0%10+$k1%10+$k2%10;
+                                ?>
+                            <td><?=$k0%10?> + <?=$k1%10?> + <?=$k2%10?> = <?=$res;?></td>
+                            <td>
+                            <?php if($bj_predictdata[$i]['size'] == 1){echo "大 | ";} else {echo "小 | ";}?>
+                            <?php if($bj_predictdata[$i]['odd'] == 1){echo "单";} else {echo "双";}?>
+                            </td>
+                            <td>
+                            <?php if($res%2==$bj_predictdata[$i]['odd']){
+                                echo $this->Html->image('icon_yes.png', ['alt' => '']);
+                            } else if($res<14 && $bj_predictdata[$i]['size']==0){
+                                echo $this->Html->image('icon_yes.png', ['alt' => '']);
+                            } else if($res>=14 && $bj_predictdata[$i]['size']==1){
+                                echo $this->Html->image('icon_yes.png', ['alt' => '']);
+                            } else {
+                                echo $this->Html->image('icon_no.png', ['alt' => '']);
+                            }?>
+                            </td>
+                        </tr>
+                    <?php }?>
                     </tbody>
                 </table>
             </div>
@@ -626,7 +660,7 @@ $bjnext_stamp=$bjnext_stamp*1000;
     // bj_display
 
     var x = setInterval(function() {
-        var now = new Date().getTime();
+        var now = new Date().getTime()+28800000;
         var distance = <?= $bjnext_stamp ?> - now;
 
         var hours = Math.floor(distance / (1000 * 60 * 60));
