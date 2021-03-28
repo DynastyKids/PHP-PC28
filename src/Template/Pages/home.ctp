@@ -4,9 +4,10 @@ use Cake\ORM\TableRegistry;
 
 $ca_datasource = "http://144.202.119.241:9876/3.json";
 $bj_datasource = "http://144.202.119.241:9876/api/1.json";
+$btc_datasource = "https://api.365kaik.com/api/v1/trend/getHistoryList?t=1616926327&lotCode=10048&date=&pageSize=100&pageNum=0";
 $ca_data = json_decode(file_get_contents($ca_datasource), true);
 $bj_data = json_decode(file_get_contents($bj_datasource), true);
-$btc_data = '';
+$btc_data = json_decode(file_get_contents($btc_datasource), true);
 
 $canext_stamp = $ca_data['data'][0]['time'] + 210000;
 if (date('Hi', $canext_stamp) >= 1157 && date('Hi', $canext_stamp) <= 1300) {
@@ -19,16 +20,20 @@ $canext_time = date('Y-m-d H:i:s', $canext_stamp / 1000 + 28800);
 //     $bjnext_stamp += 25210000;
 // }
 // $bjnext_time = date('Y-m-d H:i:s', $bjnext_stamp / 1000 + 28800);
-$bjnext_time = date_create_from_format('Y-m-d H:i:s',$bj_data['data'][0]['opentime']);
+$bjnext_time = date_create_from_format('Y-m-d H:i:s', $bj_data['data'][0]['opentime']);
 $bjnext_stamp = $bjnext_time->getTimestamp();
-$bjnext_stamp+=210;
-// debug($bjnext_stamp);
-// debug(date('Y-m-d H:i:s', $bjnext_stamp));
+$bjnext_stamp += 210;
 if (date('Hi', $bjnext_stamp) > 2355 && date('Hi', $bjnext_stamp) < 705) {
-    date_add($bjnext_time,date_interval_create_from_date_string('420m'));
+    date_add($bjnext_time, date_interval_create_from_date_string('420m'));
     $bjnext_stamp = $bjnext_time->getTimestamp();
 }
-$bjnext_stamp=$bjnext_stamp*1000;
+$bjnext_stamp = $bjnext_stamp * 1000;
+
+
+$btcnext_time = date_create_from_format('Y-m-d H:i:s', $btc_data['data']['list'][0]['drawTime']);
+date_add($btcnext_time, new DateInterval('PT1M'));
+$btcnext_stamp = $btcnext_time->getTimestamp();
+$btcnext_stamp *= 1000;
 
 // debug($bj_data['data'][0]['time']);
 // debug($bjnext_stamp);
@@ -37,13 +42,13 @@ $bjnext_stamp=$bjnext_stamp*1000;
 <div class="container">
     <header>
         <!-- <div class="logo"><img src="img/logo.png"></div> -->
-        <?= $this->Html->image('logo.png',['class'=>'logo','url'=>'/'])?>
+        <?= $this->Html->image('logo.png', ['class' => 'logo', 'url' => '/']) ?>
         <div class="tips">PC28--极力打造精准北京28、加拿大28人工计划网站</div>
     </header>
     <!-- <div class="all_pic wap_hide"><img src="img/pic_pc.jpg"></div> -->
-    <?= $this->Html->image('pic_pc.jpg',['class'=>'all_pic wap_hide'])?>
+    <?= $this->Html->image('pic_pc.jpg', ['class' => 'all_pic wap_hide']) ?>
     <!-- <div class="all_pic wap_show"><img src="img/pic_wap.jpg"></div> -->
-    <?= $this->Html->image('img/pic_wap.jpg',['class'=>'all_pic wap_show'])?>
+    <?= $this->Html->image('img/pic_wap.jpg', ['class' => 'all_pic wap_show']) ?>
     <div class="jiang">
         <ul class="tab">
             <li class="on" data-id="qi_jnd">加拿大28</li>
@@ -132,29 +137,92 @@ $bjnext_stamp=$bjnext_stamp*1000;
                     </dl>
                 </div>
                 <div class="line"></div>
-                <?php 
-                    $k = explode(",",$bj_data['data'][0]['opencode']);
-                    $k0=$k1=$k2=0;
-                    for($i=0;$i<6;$i++){
-                        $k0+=$k[$i];
-                        $k1+=$k[$i+6];
-                        $k2+=$k[$i+12];
-                    }
-                    $total = $k0%10+$k1%10+$k2%10;
-                    ?>
+                <?php
+                $k = explode(",", $bj_data['data'][0]['opencode']);
+                $k0 = $k1 = $k2 = 0;
+                for ($i = 0; $i < 6; $i++) {
+                    $k0 += $k[$i];
+                    $k1 += $k[$i + 6];
+                    $k2 += $k[$i + 12];
+                }
+                $total = $k0 % 10 + $k1 % 10 + $k2 % 10;
+                ?>
                 <dl class="kai">
-                    <dd><?= $k0%10 ?></dd>
+                    <dd><?= $k0 % 10 ?></dd>
                     <dt>+</dt>
-                    <dd><?= $k1%10 ?></dd>
+                    <dd><?= $k1 % 10 ?></dd>
                     <dt>+</dt>
-                    <dd><?= $k2%10 ?></dd>
+                    <dd><?= $k2 % 10 ?></dd>
                     <dt>=</dt>
                     <dd class="zong"><?= $total ?></dd>
-                    <dt><?php if($total>=14){echo "（ 小 ，";} else {echo "（ 大 ，";}?>
-                    <?php if($total%2!=0){ echo "单 ）";}else{echo "双 ）";}?></dt>
+                    <dt><?php if ($total >= 14) {
+                            echo "（ 小 ，";
+                        } else {
+                            echo "（ 大 ，";
+                        } ?>
+                        <?php if ($total % 2 != 0) {
+                            echo "单 ）";
+                        } else {
+                            echo "双 ）";
+                        } ?></dt>
                 </dl>
             </div>
         </div>
+
+        <div id="qi_xjp">
+            <div class="flex_main">
+                <div class="info">
+                    <div class="left"><img src="img/qi_cn.png"></div>
+                    <div class="right">
+                        <div class="bt">最新：<span><?= $btc_data['data']['list'][0]['drawIssue'] ?></span>期</div>
+                        <div class="qis_but">
+                            <div class="prev"></div>
+                            <div class="t"><?= $btc_data['data']['list'][0]['drawIssue'] ?></div>
+                            <ul>
+                                <li class="on"><?= $btc_data['data']['list'][0]['drawIssue'] ?></li>
+                                <?php for ($i = 1; $i < 15; $i++) {
+                                    echo "<li>" . $btc_data['data']['list'][$i]['drawIssue'] . "</li>";
+                                } ?>
+                            </ul>
+                            <div class="next"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="line"></div>
+                <div class="date">下一期：<dl>
+                        <dd><em id="btcmin1"></em></dd>
+                        <dd><em id="btcmin2"></em></dd>
+                        <dt id="btcdivider"></dt>
+                        <dd><em id="btcsec1"></em></dd>
+                        <dd><em id="btcsec2"></em></dd>
+                    </dl>
+                </div>
+                <div class="line"></div>
+                <?php $k = explode(",", $btc_data['data']['list'][0]['drawCode']); ?>
+                <dl class="kai">
+                    <dd><?= $k[0] ?></dd>
+                    <dt>+</dt>
+                    <dd><?= $k[1] ?></dd>
+                    <dt>+</dt>
+                    <dd><?= $k[2] ?></dd>
+                    <dt>=</dt>
+                    <?php $total = $k[0] + $k[1] + $k[2] ?>
+                    <dd class="zong"><?= $total ?></dd>
+                    <dt><?php if ($total >= 14) {
+                            echo "（ 小 ，";
+                        } else {
+                            echo "（ 大 ，";
+                        } ?>
+                        <?php if ($total % 2 != 0) {
+                            echo "单 ）";
+                        } else {
+                            echo "双 ）";
+                        } ?></dt>
+                </dl>
+            </div>
+        </div>
+
+
     </div>
     <div class="main">
         <div class="bj" id="jnd">
@@ -219,14 +287,14 @@ $bjnext_stamp=$bjnext_stamp*1000;
                                     }
                                 }
                             } ?>
-                            <th><?= $ca1+$ca2?></th>
-                            <th><?= $ca3+$ca4?></th>
-                            <th><?= $ca1+$ca3?></th>
-                            <th><?= $ca2+$ca4?></th>
-                            <th><?= $ca1?></th>
-                            <th><?= $ca2?></th>
-                            <th><?= $ca3?></th>
-                            <th><?= $ca4?></th>
+                            <th><?= $ca1 + $ca2 ?></th>
+                            <th><?= $ca3 + $ca4 ?></th>
+                            <th><?= $ca1 + $ca3 ?></th>
+                            <th><?= $ca2 + $ca4 ?></th>
+                            <th><?= $ca1 ?></th>
+                            <th><?= $ca2 ?></th>
+                            <th><?= $ca3 ?></th>
+                            <th><?= $ca4 ?></th>
                         </tr>
                         <?php for ($i = 0; $i < 100; $i++) { ?>
                             <tr>
@@ -349,16 +417,16 @@ $bjnext_stamp=$bjnext_stamp*1000;
                                 <td><?= $bj_data['data'][$i]['expect'] ?></td>
                                 <td><?= $bj_data['data'][$i]['opentime'] ?></td>
                                 <td>
-                                <?php 
-                                    $n0=$n1=$n2=0;
-                                    $n = explode(",",$bj_data['data'][$i]['opencode']);
-                                    for ($j=0;$j<6;$j++){
-                                        $n0+=$n[$j];
-                                        $n1+=$n[$j+6];
-                                        $n2+=$n[$j+12];
+                                    <?php
+                                    $n0 = $n1 = $n2 = 0;
+                                    $n = explode(",", $bj_data['data'][$i]['opencode']);
+                                    for ($j = 0; $j < 6; $j++) {
+                                        $n0 += $n[$j];
+                                        $n1 += $n[$j + 6];
+                                        $n2 += $n[$j + 12];
                                     }
-                                ?>
-                                <?=$n0%10?> + <?= $n1%10?> + <?= $n2%10?> = <?=$n0%10+$n1%10+$n2%10?>
+                                    ?>
+                                    <?= $n0 % 10 ?> + <?= $n1 % 10 ?> + <?= $n2 % 10 ?> = <?= $n0 % 10 + $n1 % 10 + $n2 % 10 ?>
                                 </td>
                             </tr>
                         <?php } ?>
@@ -385,73 +453,79 @@ $bjnext_stamp=$bjnext_stamp*1000;
                         <tr>
                             <th>间隔</th>
                             <th></th>
-                            <?php $ca1=$ca2=$ca3=$ca4=0;
-                                for($i = 0; $i < 100; $i++){
-                                    $k = explode(",",$bj_data['data'][$i]['opencode']);
-                                    $l0=$l1=$l2=0;
-                                    for($j=0;$j<6;$j++){
-                                        $l0+=$k[$j];
-                                        $l1+=$k[$j+6];
-                                        $l2+=$k[$j+12];
-                                    }
-                                $res = $l0%10+$l1%10+$l2%10;
-                                if($res<14){
-                                    if($res%2==0){$ca2++;} 
-                                    else{$ca1++;}
-                                } else{
-                                    if($res%2==0){$ca4++;} 
-                                    else{$ca3++;}
+                            <?php $ca1 = $ca2 = $ca3 = $ca4 = 0;
+                            for ($i = 0; $i < 100; $i++) {
+                                $k = explode(",", $bj_data['data'][$i]['opencode']);
+                                $l0 = $l1 = $l2 = 0;
+                                for ($j = 0; $j < 6; $j++) {
+                                    $l0 += $k[$j];
+                                    $l1 += $k[$j + 6];
+                                    $l2 += $k[$j + 12];
                                 }
-                            }?>
-                            <th><?= $ca1+$ca2?></th>
-                            <th><?= $ca3+$ca4?></th>
-                            <th><?= $ca1+$ca3?></th>
-                            <th><?= $ca2+$ca4?></th>
-                            <th><?= $ca1?></th>
-                            <th><?= $ca2?></th>
-                            <th><?= $ca3?></th>
-                            <th><?= $ca4?></th>
-                        </tr>
-                        <?php for($i = 0; $i < 100; $i++){ 
-                            $k = explode(",",$bj_data['data'][$i]['opencode']);
-                                    $l0=$l1=$l2=0;
-                                    for($j=0;$j<6;$j++){
-                                        $l0+=$k[$j];
-                                        $l1+=$k[$j+6];
-                                        $l2+=$k[$j+12];
+                                $res = $l0 % 10 + $l1 % 10 + $l2 % 10;
+                                if ($res < 14) {
+                                    if ($res % 2 == 0) {
+                                        $ca2++;
+                                    } else {
+                                        $ca1++;
                                     }
-                            $res = $l0%10+$l1%10+$l2%10;
+                                } else {
+                                    if ($res % 2 == 0) {
+                                        $ca4++;
+                                    } else {
+                                        $ca3++;
+                                    }
+                                }
+                            } ?>
+                            <th><?= $ca1 + $ca2 ?></th>
+                            <th><?= $ca3 + $ca4 ?></th>
+                            <th><?= $ca1 + $ca3 ?></th>
+                            <th><?= $ca2 + $ca4 ?></th>
+                            <th><?= $ca1 ?></th>
+                            <th><?= $ca2 ?></th>
+                            <th><?= $ca3 ?></th>
+                            <th><?= $ca4 ?></th>
+                        </tr>
+                        <?php for ($i = 0; $i < 100; $i++) {
+                            $k = explode(",", $bj_data['data'][$i]['opencode']);
+                            $l0 = $l1 = $l2 = 0;
+                            for ($j = 0; $j < 6; $j++) {
+                                $l0 += $k[$j];
+                                $l1 += $k[$j + 6];
+                                $l2 += $k[$j + 12];
+                            }
+                            $res = $l0 % 10 + $l1 % 10 + $l2 % 10;
                         ?>
                             <tr>
                                 <td><?= $bj_data['data'][$i]['expect'] ?></td>
                                 <td><?= $res; ?></td>
-                                <?php if($res>=14){
+                                <?php if ($res >= 14) {
                                     echo "<td><span class='icon'>大</span></td><td></td>";
-                                } else{
+                                } else {
                                     echo "<td></td><td><span class='icon'>小</span></td>";
-                                }?>
-                                <?php if($res%2!=0){
+                                } ?>
+                                <?php if ($res % 2 != 0) {
                                     echo "<td><span class='icon'>单</span></td><td></td>";
-                                } else{
+                                } else {
                                     echo "<td></td><td><span class='icon'>双</span></td>";
-                                }?>
-                                <?php if($res>=14){
-                                    if($res%2!=0){
+                                } ?>
+                                <?php if ($res >= 14) {
+                                    if ($res % 2 != 0) {
                                         echo "<td class='er'><span class='icon'>大单</span></td><td></td>";
-                                    } else{
+                                    } else {
                                         echo "<td></td><td class='er'><span class='icon'>大双</span></td>";
                                     }
                                     echo "<td></td><td></td>";
-                                } else{
+                                } else {
                                     echo "<td></td><td></td>";
-                                    if($res%2!=0){
+                                    if ($res % 2 != 0) {
                                         echo "<td class='er'><span class='icon'>小单</span></td><td></td>";
-                                    } else{
+                                    } else {
                                         echo "<td></td><td class='er'><span class='icon'>小双</span></td>";
                                     }
-                                }?>
+                                } ?>
                             </tr>
-                        <?php }?>
+                        <?php } ?>
                     </tbody>
                 </table>
             </div>
@@ -466,46 +540,62 @@ $bjnext_stamp=$bjnext_stamp*1000;
                         </tr>
                     </thead>
                     <tbody id="bjgameforecastlist">
-                    <?php $bj_predictdata = TableRegistry::getTableLocator()->get('bj')->find()->orderDesc('id')->limit(110)->toArray(); ?>
+                        <?php $bj_predictdata = TableRegistry::getTableLocator()->get('bj')->find()->orderDesc('id')->limit(110)->toArray(); ?>
                         <tr>
-                            <td><?= $bj_data['data'][0]['expect']+1?></td>
+                            <td><?= $bj_data['data'][0]['expect'] + 1 ?></td>
                             <td>--- 预测仅供参考 ---</td>
                             <td>
-                            <?php if($bj_predictdata[0]['size'] == 1){echo "大 | ";} else {echo "小 | ";}?>
-                            <?php if($bj_predictdata[0]['odd'] == 1){echo "单";} else {echo "双";}?>
+                                <?php if ($bj_predictdata[0]['size'] == 1) {
+                                    echo "大 | ";
+                                } else {
+                                    echo "小 | ";
+                                } ?>
+                                <?php if ($bj_predictdata[0]['odd'] == 1) {
+                                    echo "单";
+                                } else {
+                                    echo "双";
+                                } ?>
                             <td></td>
                         </tr>
-                    <?php for($i=1;$i<100;$i++){?>
-                        <tr>
-                            <td><?= $bj_data['data'][$i]['expect']?></td>
-                            <?php
-                                $k=explode(",",$bj_data['data'][$i]['opencode']);
-                                $k0=$k1=$k2=0;
-                                for($j=0;$j<6;$j++){
-                                    $k0+=$k[$j];
-                                    $k1+=$k[$j+6];
-                                    $k2+=$k[$j+12];
+                        <?php for ($i = 0; $i < 100; $i++) { ?>
+                            <tr>
+                                <td><?= $bj_data['data'][$i]['expect'] ?></td>
+                                <?php
+                                $k = explode(",", $bj_data['data'][$i]['opencode']);
+                                $k0 = $k1 = $k2 = 0;
+                                for ($j = 0; $j < 6; $j++) {
+                                    $k0 += $k[$j];
+                                    $k1 += $k[$j + 6];
+                                    $k2 += $k[$j + 12];
                                 }
-                                $res=$k0%10+$k1%10+$k2%10;
+                                $res = $k0 % 10 + $k1 % 10 + $k2 % 10;
                                 ?>
-                            <td><?=$k0%10?> + <?=$k1%10?> + <?=$k2%10?> = <?=$res;?></td>
-                            <td>
-                            <?php if($bj_predictdata[$i]['size'] == 1){echo "大 | ";} else {echo "小 | ";}?>
-                            <?php if($bj_predictdata[$i]['odd'] == 1){echo "单";} else {echo "双";}?>
-                            </td>
-                            <td>
-                            <?php if($res%2==$bj_predictdata[$i]['odd']){
-                                echo $this->Html->image('icon_yes.png', ['alt' => '']);
-                            } else if($res<14 && $bj_predictdata[$i]['size']==0){
-                                echo $this->Html->image('icon_yes.png', ['alt' => '']);
-                            } else if($res>=14 && $bj_predictdata[$i]['size']==1){
-                                echo $this->Html->image('icon_yes.png', ['alt' => '']);
-                            } else {
-                                echo $this->Html->image('icon_no.png', ['alt' => '']);
-                            }?>
-                            </td>
-                        </tr>
-                    <?php }?>
+                                <td><?= $k0 % 10 ?> + <?= $k1 % 10 ?> + <?= $k2 % 10 ?> = <?= $res; ?></td>
+                                <td>
+                                    <?php if ($bj_predictdata[$i]['size'] == 1) {
+                                        echo "大 | ";
+                                    } else {
+                                        echo "小 | ";
+                                    } ?>
+                                    <?php if ($bj_predictdata[$i]['odd'] == 1) {
+                                        echo "单";
+                                    } else {
+                                        echo "双";
+                                    } ?>
+                                </td>
+                                <td>
+                                    <?php if ($res % 2 == $bj_predictdata[$i]['odd']) {
+                                        echo $this->Html->image('icon_yes.png', ['alt' => '']);
+                                    } else if ($res < 14 && $bj_predictdata[$i]['size'] == 0) {
+                                        echo $this->Html->image('icon_yes.png', ['alt' => '']);
+                                    } else if ($res >= 14 && $bj_predictdata[$i]['size'] == 1) {
+                                        echo $this->Html->image('icon_yes.png', ['alt' => '']);
+                                    } else {
+                                        echo $this->Html->image('icon_no.png', ['alt' => '']);
+                                    } ?>
+                                </td>
+                            </tr>
+                        <?php } ?>
                     </tbody>
                 </table>
             </div>
@@ -527,11 +617,13 @@ $bjnext_stamp=$bjnext_stamp*1000;
                         </tr>
                     </thead>
                     <tbody id="xjpopencodelist">
-                        <tr>
-                            <td>2484572</td>
-                            <td>2019-10-10 18:00:30</td>
-                            <td>8+3+7=18</td>
-                        </tr>
+                        <?php for ($i = 0; $i < 100; $i++) { ?>
+                            <tr>
+                                <td><?= $btc_data['data']['list'][$i]['drawIssue'] ?></td>
+                                <td><?= $btc_data['data']['list'][$i]['drawTime'] ?></td>
+                                <td><?= str_replace(",", " + ", $btc_data['data']['list'][$i]['drawCode']) ?> = <?= $btc_data['data']['list'][$i]['result']['pc28_total'] ?></td>
+                            </tr>
+                        <?php } ?>
                     </tbody>
                 </table>
             </div>
@@ -553,29 +645,64 @@ $bjnext_stamp=$bjnext_stamp*1000;
                     </thead>
                     <tbody id="xjpresultlist">
                         <tr>
+                            <?php
+                            $bt1 = $bt2 = $bt3 = $bt4 = 0;
+                            for ($i = 0; $i < 100; $i++) {
+                                if ($btc_data['data']['list'][$i]['result']['pc28_total'] >= 14) {
+                                    if ($btc_data['data']['list'][$i]['result']['pc28_total'] % 2 != 0) {
+                                        $bt1++;
+                                    } else {
+                                        $bt2++;
+                                    }
+                                } else {
+                                    if ($btc_data['data']['list'][$i]['result']['pc28_total'] % 2 != 0) {
+                                        $bt3++;
+                                    } else {
+                                        $bt4++;
+                                    }
+                                }
+                            } ?>
                             <th>间隔</th>
                             <th></th>
-                            <th>5</th>
-                            <th>0</th>
-                            <th>2</th>
-                            <th>0</th>
-                            <th>8</th>
-                            <th>5</th>
-                            <th>2</th>
-                            <th>0</th>
+                            <th><?= $bt1 + $bt2 ?></th>
+                            <th><?= $bt3 + $bt4 ?></th>
+                            <th><?= $bt1 + $bt3 ?></th>
+                            <th><?= $bt2 + $bt4 ?></th>
+                            <th><?= $bt1 ?></th>
+                            <th><?= $bt2 ?></th>
+                            <th><?= $bt3 ?></th>
+                            <th><?= $bt4 ?></th>
                         </tr>
-                        <tr>
-                            <td>2484572</td>
-                            <td>11</td>
-                            <td></td>
-                            <td><span class="icon">小</span></td>
-                            <td><span class="icon">单</span></td>
-                            <td></td>
-                            <td class="er"></td>
-                            <td class="er"></td>
-                            <td class="er"><span class="icon">小单</span></td>
-                            <td class="er"></td>
-                        </tr>
+                        <?php for ($i = 0; $i < 100; $i++) { ?>
+                            <tr>
+                                <td><?= $btc_data['data']['list'][$i]['drawIssue'] ?></td>
+                                <td><?= $btc_data['data']['list'][$i]['result']['pc28_total'] ?></td>
+                                <?php if ($btc_data['data']['list'][$i]['result']['pc28_total'] >= 14) {
+                                    echo "<td><span class='icon'>大</span></td><td></td>";
+                                } else {
+                                    echo "<td></td><td><span class='icon'>小</span></td>";
+                                } ?>
+                                <?php if ($btc_data['data']['list'][$i]['result']['pc28_total'] % 2 != 0) {
+                                    echo "<td><span class='icon'>单</span></td><td></td>";
+                                } else {
+                                    echo "<td></td><td><span class='icon'>双</span></td>";
+                                } ?>
+
+                                <?php if ($btc_data['data']['list'][$i]['result']['pc28_total'] >= 14) {
+                                    if ($btc_data['data']['list'][$i]['result']['pc28_total'] % 2 != 0) {
+                                        echo "<td class='er'><span class='icon'>大单</span></td><td></td><td></td><td></td>";
+                                    } else {
+                                        echo "<td></td><td class='er'><span class='icon'>大双</span></td><td></td><td></td>";
+                                    }
+                                } else {
+                                    if ($btc_data['data']['list'][$i]['result']['pc28_total'] % 2 != 0) {
+                                        echo "<td></td><td></td><td class='er'><span class='icon'>小单</span></td><td></td>";
+                                    } else {
+                                        echo "<td></td><td></td><td></td><td class='er'><span class='icon'>小双</span></td>";
+                                    }
+                                } ?>
+                            </tr>
+                        <?php } ?>
                     </tbody>
                 </table>
             </div>
@@ -590,12 +717,21 @@ $bjnext_stamp=$bjnext_stamp*1000;
                         </tr>
                     </thead>
                     <tbody id="xjpgameforecastlist">
+                        <?php $bj_predictdata = TableRegistry::getTableLocator()->get('btc')->find()->orderDesc('id')->limit(110)->toArray();?>
                         <tr>
-                            <td>977582</td>
-                            <td>9+6+2=17</td>
+                            <td><?= $btc_data['data']['list'][0]['drawIssue']+1 ?></td>
+                            <td>--- 预测仅供参考 ---</td>
                             <td>单丨大</td>
                             <td><img src="img/icon_yes.png" class="ztpic"></td>
                         </tr>
+                        <?php for($i=0;$i<99;$i++){?>
+                        <tr>
+                            <td><?= $btc_data['data']['list'][$i]['drawIssue'] ?></td>
+                            <td>--- 预测仅供参考 ---</td>
+                            <td>单丨大</td>
+                            <td><img src="img/icon_yes.png" class="ztpic"></td>
+                        </tr>
+                        <?php }?>
                     </tbody>
                 </table>
             </div>
@@ -654,13 +790,11 @@ $bjnext_stamp=$bjnext_stamp*1000;
             // }, 7500);
         }
     }, 1000);
-</script>
 
-<script>
     // bj_display
 
-    var x = setInterval(function() {
-        var now = new Date().getTime()+28800000;
+    var y = setInterval(function() {
+        var now = new Date().getTime() + 28800000;
         var distance = <?= $bjnext_stamp ?> - now;
 
         var hours = Math.floor(distance / (1000 * 60 * 60));
@@ -699,6 +833,40 @@ $bjnext_stamp=$bjnext_stamp*1000;
             //         location.reload()
             //     };
             // }, 7500);
+        }
+    }, 1000);
+
+    // btc1f_display
+    var z = setInterval(function() {
+        var now = new Date().getTime() + 28800000;
+        var distance = <?= $btcnext_stamp ?> - now;
+
+        var hours = Math.floor(distance / (1000 * 60 * 60));
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        if (hours > 0) {
+            document.getElementById("btcmin1").innerHTML = Math.floor(hours / 10);
+            document.getElementById("btcmin2").innerHTML = hours % 10;
+            document.getElementById("btcdivider").innerHTML = ":"
+            document.getElementById("btcsec1").innerHTML = Math.floor(minutes / 10);
+            document.getElementById("btcsec2").innerHTML = minutes % 10;
+        } else {
+            document.getElementById("btcmin1").innerHTML = Math.floor(minutes / 10);
+            document.getElementById("btcmin2").innerHTML = minutes % 10;
+            document.getElementById("btcdivider").innerHTML = ":"
+            document.getElementById("btcsec1").innerHTML = Math.floor(seconds / 10);
+            document.getElementById("btcsec2").innerHTML = seconds % 10;
+        }
+
+        // If the count down is finished, write some text
+        if (distance < 0) {
+            clearInterval(x);
+            document.getElementById("btcmin1").innerHTML = "开";
+            document.getElementById("btcmin2").innerHTML = "奖";
+            document.getElementById("btcdivider").innerHTML = ""
+            document.getElementById("btcsec1").innerHTML = "中";
+            document.getElementById("btcsec2").innerHTML = "…";
         }
     }, 1000);
 </script>
