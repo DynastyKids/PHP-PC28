@@ -69,8 +69,6 @@ class PagesController extends AppController
     //     }
     // }
     public function home($id=null){
-        $this->response->header('Access-Control-Allow-Origin','*');
-        
         $this->set(compact('id'));
     }
 }
