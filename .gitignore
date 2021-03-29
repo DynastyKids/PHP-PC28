@@ -8,9 +8,10 @@
 
 # Specific Files #
 ##################
-/webroot/js/1.json
-/webroot/js/2.json
-/webroot/js/3.json
+# Data Files
+/webroot/js/1.js
+/webroot/js/2.js
+/webroot/js/3.js
 
 # OS generated files #
 ######################
