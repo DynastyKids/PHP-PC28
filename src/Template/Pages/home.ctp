@@ -21,8 +21,8 @@ $canext_time = date('Y-m-d H:i:s', $canext_stamp / 1000 + 28800);
 // }
 // $bjnext_time = date('Y-m-d H:i:s', $bjnext_stamp / 1000 + 28800);
 $bjnext_time = date_create_from_format('Y-m-d H:i:s', $bj_data['data'][0]['opentime']);
+date_add($bjnext_time, new DateInterval('PT5M'));
 $bjnext_stamp = $bjnext_time->getTimestamp();
-$bjnext_stamp += 210;
 if (date('Hi', $bjnext_stamp) > 2355 && date('Hi', $bjnext_stamp) < 705) {
     date_add($bjnext_time, date_interval_create_from_date_string('420m'));
     $bjnext_stamp = $bjnext_time->getTimestamp();
@@ -51,9 +51,19 @@ $btcnext_stamp *= 1000;
     <?= $this->Html->image('img/pic_wap.jpg', ['class' => 'all_pic wap_show']) ?>
     <div class="jiang">
         <ul class="tab">
-            <li class="on" data-id="qi_jnd">加拿大28</li>
-            <li data-id="qi_bj">北京28</li>
-            <li data-id="qi_xjp">比特币28</li>
+            <?php if($id!=2&&$id!=3){?>
+                <li class="on" data-id="qi_jnd">加拿大28</li>
+                <li data-id="qi_bj">北京28</li>
+                <li data-id="qi_xjp">比特币28</li>
+            <?php } else if($id==2){?>
+                <li data-id="qi_jnd">加拿大28</li>
+                <li class="on" data-id="qi_bj">北京28</li>
+                <li data-id="qi_xjp">比特币28</li>
+            <?php } else if($id==3){?>
+                <li data-id="qi_jnd">加拿大28</li>
+                <li data-id="qi_bj">北京28</li>
+                <li class="on" data-id="qi_xjp">比特币28</li>
+            <?php }?>
         </ul>
         <div id="qi_jnd">
             <div class="flex_main">
@@ -225,7 +235,11 @@ $btcnext_stamp *= 1000;
 
     </div>
     <div class="main">
+        <?php if($id==2 || $id==3){?>
+        <div class="bj" id="jnd" style="display:none;">
+        <?php } else {?>
         <div class="bj" id="jnd">
+        <?php }?>
             <ul class="tab">
                 <li class="on" data-id="jndtable_jieguo"><img src="img/icon_jg.png" class="default"><img src="img/icon_jgcur.png" class="hide"><span>结果</span></li>
                 <li data-id="jndtable_zoushi"><img src="img/icon_zs.png" class="default"><img src="img/icon_zscur.png" class="hide"><span>走势</span></li>
@@ -395,8 +409,12 @@ $btcnext_stamp *= 1000;
                 </table>
             </div>
         </div>
-
+        
+        <?php if($id==2){?>
+        <div class="bj" id="bj">
+        <?php } else {?>
         <div class="bj" id="bj" style="display:none;">
+        <?php }?>
             <ul class="tab">
                 <li class="on" data-id="bjtable_jieguo"><img src="img/icon_jg.png" class="default"><img src="img/icon_jgcur.png" class="hide"><span>结果</span></li>
                 <li data-id="bjtable_zoushi"><img src="img/icon_zs.png" class="default"><img src="img/icon_zscur.png" class="hide"><span>走势</span></li>
@@ -600,8 +618,12 @@ $btcnext_stamp *= 1000;
                 </table>
             </div>
         </div>
-
+        
+        <?php if($id==3){?>
+        <div class="bj" id="xjp" >
+        <?php }else {?>
         <div class="bj" id="xjp" style="display:none;">
+        <?php }?>
             <ul class="tab">
                 <li class="on" data-id="xjptable_jieguo"><img src="img/icon_jg.png" class="default"><img src="img/icon_jgcur.png" class="hide"><span>结果</span></li>
                 <li data-id="xjptable_zoushi"><img src="img/icon_zs.png" class="default"><img src="img/icon_zscur.png" class="hide"><span>走势</span></li>
@@ -717,19 +739,39 @@ $btcnext_stamp *= 1000;
                         </tr>
                     </thead>
                     <tbody id="xjpgameforecastlist">
-                        <?php $bj_predictdata = TableRegistry::getTableLocator()->get('btc')->find()->orderDesc('id')->limit(110)->toArray();?>
+                        <?php $btc_predictdata = TableRegistry::getTableLocator()->get('btc')->find()->orderDesc('id')->limit(110)->toArray();?>
                         <tr>
                             <td><?= $btc_data['data']['list'][0]['drawIssue']+1 ?></td>
                             <td>--- 预测仅供参考 ---</td>
-                            <td>单丨大</td>
-                            <td><img src="img/icon_yes.png" class="ztpic"></td>
+                            <td>
+                                <?php if ($btc_predictdata[0]['size'] == 1) { echo "大 | ";} 
+                                else { echo "小 | "; } ?>
+                                <?php if ($btc_predictdata[0]['odd'] == 1) { echo "单"; } 
+                                else { echo "双";} ?>
+                            </td>
+                            <td></td>
                         </tr>
                         <?php for($i=0;$i<99;$i++){?>
                         <tr>
                             <td><?= $btc_data['data']['list'][$i]['drawIssue'] ?></td>
-                            <td>--- 预测仅供参考 ---</td>
-                            <td>单丨大</td>
-                            <td><img src="img/icon_yes.png" class="ztpic"></td>
+                            <td><?= str_replace(",", " + ", $btc_data['data']['list'][$i]['drawCode']) ?> = <?= $btc_data['data']['list'][$i]['result']['pc28_total'] ?></td>
+                            <td>
+                                <?php if ($btc_predictdata[$i+1]['size'] == 1) { echo "大 | ";} 
+                                else { echo "小 | "; } ?>
+                                <?php if ($btc_predictdata[$i+1]['odd'] == 1) { echo "单"; } 
+                                else { echo "双";} ?>
+                            </td>
+                            <td>
+                            <?php if ($btc_data['data']['list'][$i]['result']['pc28_total'] % 2 == $btc_predictdata[$i]['odd']) {
+                                        echo $this->Html->image('icon_yes.png', ['alt' => '']);
+                                    } else if ($btc_data['data']['list'][$i]['result']['pc28_total'] < 14 && $btc_predictdata[$i]['size'] == 0) {
+                                        echo $this->Html->image('icon_yes.png', ['alt' => '']);
+                                    } else if ($btc_data['data']['list'][$i]['result']['pc28_total'] >= 14 && $btc_predictdata[$i]['size'] == 1) {
+                                        echo $this->Html->image('icon_yes.png', ['alt' => '']);
+                                    } else {
+                                        echo $this->Html->image('icon_no.png', ['alt' => '']);
+                                    } ?>
+                            </td>
                         </tr>
                         <?php }?>
                     </tbody>
@@ -738,19 +780,34 @@ $btcnext_stamp *= 1000;
         </div>
 
         <div class="tip">本站提供北京28、加拿大28预测，仅供参考</div>
+        <div class="tip" id="tiptest"></div>
     </div>
     <footer>Copyright©PC28网络科技有限公司</footer>
 </div>
 
+<!-- <script>
+var aaa;
+$.getJSON('http://144.202.119.241:9876/3.json', function(data) {
+    console.log(data);
+    aaa=data;
+});
+</script> -->
 
 <script>
     // CA_display
     var currentdata;
     var nextdata;
+    var ca_0 = <?= json_encode($ca_data);?>;
+    // var ca_init=ca_0.data[0].qihao;
+    var bj_0 = <?= json_encode($bj_data);?>;
+    // var bj_init=bj_0.data[0].expect;
+    var btc_0 = <?= json_encode($btc_data);?>;
+    // var btc_init=btc_0.data.list[0].drawIssue
+
 
     var x = setInterval(function() {
         var now = new Date().getTime();
-        var distance = <?= $canext_stamp ?> - now;
+        var distance = "<?= $canext_stamp?>" - now;
 
         var hours = Math.floor(distance / (1000 * 60 * 60));
         var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
@@ -782,6 +839,20 @@ $btcnext_stamp *= 1000;
             document.getElementById("casec1").innerHTML = "中";
             document.getElementById("casec2").innerHTML = "…";
 
+
+            setInterval(function(){
+                //当前问题：倒计时到0后无法抓到新的数据
+                var ca_current = <?= file_get_contents("http://144.202.119.241:9876/3.json");?>;
+                console.log(ca_0.data[0]);
+                console.log(ca_current.data[0]);
+                if(ca_0.data[0].qihao != ca_current.data[0].qihao){
+                    console.log("Different");
+
+                    // 根据当前tab决定是否reload
+                    // location.reload()
+
+                }
+            },5000);
             // setInterval(function(){var nextdata = ***;if(nextdata!=currentdata){location.reload()}},10000);
             // setTimeout(function() {
             //     if (document.getElementById("qi_jnd").style.display != "none") {
@@ -792,10 +863,9 @@ $btcnext_stamp *= 1000;
     }, 1000);
 
     // bj_display
-
     var y = setInterval(function() {
         var now = new Date().getTime() + 28800000;
-        var distance = <?= $bjnext_stamp ?> - now;
+        var distance = "<?= $bjnext_stamp ?>" - now;
 
         var hours = Math.floor(distance / (1000 * 60 * 60));
         var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
@@ -839,7 +909,7 @@ $btcnext_stamp *= 1000;
     // btc1f_display
     var z = setInterval(function() {
         var now = new Date().getTime() + 28800000;
-        var distance = <?= $btcnext_stamp ?> - now;
+        var distance = "<?= $btcnext_stamp ?>" - now;
 
         var hours = Math.floor(distance / (1000 * 60 * 60));
         var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));

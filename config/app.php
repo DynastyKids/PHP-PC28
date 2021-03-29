@@ -401,4 +401,8 @@ return [
     'Session' => [
         'defaults' => 'php',
     ],
+
+    'Cors' => [
+        'AllowOrigin' => ['http://localhost', 'http://144.202.119.241:9876','https://365kaik.com']
+    ],
 ];
