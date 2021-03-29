@@ -10,21 +10,17 @@ The framework source code can be found here: [cakephp/cakephp](https://github.co
 ## Installation
 
 1. Download [Composer](https://getcomposer.org/doc/00-intro.md) or update `composer self-update`.
-2. Run `php composer.phar create-project --prefer-dist cakephp/app [app_name]`.
 
-If Composer is installed globally, run
+2. Run `php composer.phar install`.
 
-```bash
-composer create-project --prefer-dist "cakephp/app:^3.8"
-```
+3. Setup a timed task to update the json file under /webroot/json
+    1. 1.json Canada:http://144.202.119.241:9876/3.json
+    2. 2.json BJ28:http://144.202.119.241:9876/api/1.json
+    3. 3.json BTC28:https://api.365kaik.com/api/v1/trend/getHistoryList?t=1616926327&lotCode=10048&date=&pageSize=100&pageNum=0
 
-In case you want to use a custom app dir name (e.g. `/myapp/`):
+4. Import the MYSQL file under config/schema, and setup the database username and password in webroot/app_local.php
 
-```bash
-composer create-project --prefer-dist "cakephp/app:^3.8" myapp
-```
-
-You can now either use your machine's webserver to view the default home page, or start
+5. You can now either use your machine's webserver to view the default home page, or start
 up the built-in webserver with:
 
 ```bash
