@@ -832,7 +832,7 @@ $.getJSON('http://144.202.119.241:9876/3.json', function(data) {
                                 type: "get",
                                 dataType: "json",
                                 success: function(bj_d) {
-                                    if($bj_0.data[0].expect<$bj_d.data[0].expect){
+                                    if(bj_0.data[0].expect<bj_d.data[0].expect){
                                         if(document.getElementById("bj").style.display != "none"){
                                             window.location='./2';
                                         }
