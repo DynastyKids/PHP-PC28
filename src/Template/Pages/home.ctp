@@ -744,12 +744,12 @@ $btcnext_stamp *= 1000;
                                                 <td><?= $btc_data['data']['list'][0]['drawIssue'] + 1 ?></td>
                                                 <td>--- 预测仅供参考 ---</td>
                                                 <td>
-                                                    <?php if ($btc_predictdata[0]['size'] == 1) {
+                                                    <?php if ($btc_predictdata[0]['pred_size'] == 1) {
                                                         echo "大 | ";
                                                     } else {
                                                         echo "小 | ";
                                                     } ?>
-                                                    <?php if ($btc_predictdata[0]['odd'] == 1) {
+                                                    <?php if ($btc_predictdata[0]['pred_odd'] == 1) {
                                                         echo "单";
                                                     } else {
                                                         echo "双";
@@ -762,23 +762,23 @@ $btcnext_stamp *= 1000;
                                                     <td><?= $btc_data['data']['list'][$i]['drawIssue'] ?></td>
                                                     <td><?= str_replace(",", " + ", $btc_data['data']['list'][$i]['drawCode']) ?> = <?= $btc_data['data']['list'][$i]['result']['pc28_total'] ?></td>
                                                     <td>
-                                                        <?php if ($btc_predictdata[$i + 1]['size'] == 1) {
+                                                        <?php if ($btc_predictdata[$i + 1]['pred_size'] == 1) {
                                                             echo "大 | ";
                                                         } else {
                                                             echo "小 | ";
                                                         } ?>
-                                                        <?php if ($btc_predictdata[$i + 1]['odd'] == 1) {
+                                                        <?php if ($btc_predictdata[$i + 1]['pred_odd'] == 1) {
                                                             echo "单";
                                                         } else {
                                                             echo "双";
                                                         } ?>
                                                     </td>
                                                     <td>
-                                                        <?php if ($btc_data['data']['list'][$i]['result']['pc28_total'] % 2 == $btc_predictdata[$i]['odd']) {
+                                                        <?php if ($btc_data['data']['list'][$i]['result']['pc28_total'] % 2 == $btc_predictdata[$i]['pred_odd']) {
                                                             echo $this->Html->image('icon_yes.png', ['alt' => '']);
-                                                        } else if ($btc_data['data']['list'][$i]['result']['pc28_total'] < 14 && $btc_predictdata[$i]['size'] == 0) {
+                                                        } else if ($btc_data['data']['list'][$i]['result']['pc28_total'] < 14 && $btc_predictdata[$i]['pred_size'] == 0) {
                                                             echo $this->Html->image('icon_yes.png', ['alt' => '']);
-                                                        } else if ($btc_data['data']['list'][$i]['result']['pc28_total'] >= 14 && $btc_predictdata[$i]['size'] == 1) {
+                                                        } else if ($btc_data['data']['list'][$i]['result']['pc28_total'] >= 14 && $btc_predictdata[$i]['pred_size'] == 1) {
                                                             echo $this->Html->image('icon_yes.png', ['alt' => '']);
                                                         } else {
                                                             echo $this->Html->image('icon_no.png', ['alt' => '']);
@@ -832,6 +832,7 @@ $.getJSON('http://144.202.119.241:9876/3.json', function(data) {
                                 type: "get",
                                 dataType: "json",
                                 success: function(bj_d) {
+                                    console.log(bj_0.data[0].expect+":"+bj_d.data[0].expect);
                                     if(bj_0.data[0].expect<bj_d.data[0].expect){
                                         if(document.getElementById("bj").style.display != "none"){
                                             window.location='./2';
