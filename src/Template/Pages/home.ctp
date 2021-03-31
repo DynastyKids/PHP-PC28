@@ -2,9 +2,9 @@
 // ini_set('memory_limit', '1024M');
 use Cake\ORM\TableRegistry;
 
-$ca_datasource = "http://144.202.119.241:9876/3.json";
-$bj_datasource = "http://144.202.119.241:9876/api/1.json";
-$btc_datasource = "https://api.365kaik.com/api/v1/trend/getHistoryList?t=1616926327&lotCode=10048&date=&pageSize=100&pageNum=0";
+$ca_datasource = "http://testingstar.top:9876/28ca/3.json";
+$bj_datasource = "http://testingstar.top:9876/28tr/1.json";
+$btc_datasource = "http://testingstar.top:9876/28btc/1.json";
 $ca_data = json_decode(file_get_contents($ca_datasource), true);
 $bj_data = json_decode(file_get_contents($bj_datasource), true);
 $btc_data = json_decode(file_get_contents($btc_datasource), true);
@@ -795,14 +795,6 @@ $btcnext_stamp *= 1000;
                             </div>
                             <footer>Copyright©PC28网络科技有限公司</footer>
                     </div>
-
-                    <!-- <script>
-var aaa;
-$.getJSON('http://144.202.119.241:9876/3.json', function(data) {
-    console.log(data);
-    aaa=data;
-});
-</script> -->
 
                     <script>
                         var ca_0 = <?= json_encode($ca_data); ?>;
