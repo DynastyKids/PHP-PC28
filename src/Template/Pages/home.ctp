@@ -3,7 +3,7 @@
 use Cake\ORM\TableRegistry;
 
 $ca_datasource = "http://testingstar.top:9876/28ca/3.json";
-$bj_datasource = "http://testingstar.top:9876/28tr/1.json";
+$bj_datasource = "http://testingstar.top:9876/28tw/3.json";
 $btc_datasource = "http://testingstar.top:9876/28btc/1.json";
 $ca_data = json_decode(file_get_contents($ca_datasource), true);
 $bj_data = json_decode(file_get_contents($bj_datasource), true);
@@ -20,6 +20,7 @@ $canext_time = date('Y-m-d H:i:s', $canext_stamp / 1000 + 28800);
 //     $bjnext_stamp += 25210000;
 // }
 // $bjnext_time = date('Y-m-d H:i:s', $bjnext_stamp / 1000 + 28800);
+// debug($bj_data);
 $bjnext_time = date_create_from_format('Y-m-d H:i:s', $bj_data['data'][0]['opentime']);
 date_add($bjnext_time, new DateInterval('PT5M'));
 $bjnext_stamp = $bjnext_time->getTimestamp();
