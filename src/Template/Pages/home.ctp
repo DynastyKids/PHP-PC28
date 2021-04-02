@@ -22,6 +22,9 @@ $canext_time = date('Y-m-d H:i:s', $canext_stamp / 1000 + 28800);
 // $bjnext_time = date('Y-m-d H:i:s', $bjnext_stamp / 1000 + 28800);
 // debug($bj_data);
 $bjnext_time = date_create_from_format('Y-m-d H:i:s', $bj_data['data'][0]['opentime']);
+if($bjnext_time == null){
+    $bjnext_time=getdate();
+}
 date_add($bjnext_time, new DateInterval('PT5M'));
 $bjnext_stamp = $bjnext_time->getTimestamp();
 if (date('Hi', $bjnext_stamp) > 2355 && date('Hi', $bjnext_stamp) < 705) {
@@ -44,7 +47,7 @@ $btcnext_stamp *= 1000;
     <header>
         <!-- <div class="logo"><img src="img/logo.png"></div> -->
         <?= $this->Html->image('logo.png', ['class' => 'logo', 'url' => '/']) ?>
-        <div class="tips">PC28--极力打造精准北京28、加拿大28人工计划网站</div>
+        <div class="tips">PC28--极力打造精准宾果28、加拿大28人工计划网站</div>
     </header>
     <!-- <div class="all_pic wap_hide"><img src="img/pic_pc.jpg"></div> -->
     <?= $this->Html->image('pic_pc.jpg', ['class' => 'all_pic wap_hide']) ?>
@@ -54,15 +57,15 @@ $btcnext_stamp *= 1000;
         <ul class="tab">
             <?php if ($id != 2 && $id != 3) { ?>
                 <li class="on" data-id="qi_jnd">加拿大28</li>
-                <li data-id="qi_bj">北京28</li>
+                <li data-id="qi_bj">宾果28</li>
                 <li data-id="qi_xjp">比特币28</li>
             <?php } else if ($id == 2) { ?>
                 <li data-id="qi_jnd">加拿大28</li>
-                <li class="on" data-id="qi_bj">北京28</li>
+                <li class="on" data-id="qi_bj">宾果28</li>
                 <li data-id="qi_xjp">比特币28</li>
             <?php } else if ($id == 3) { ?>
                 <li data-id="qi_jnd">加拿大28</li>
-                <li data-id="qi_bj">北京28</li>
+                <li data-id="qi_bj">宾果28</li>
                 <li class="on" data-id="qi_xjp">比特币28</li>
             <?php } ?>
         </ul>
@@ -183,7 +186,7 @@ $btcnext_stamp *= 1000;
         <div id="qi_xjp">
             <div class="flex_main">
                 <div class="info">
-                    <div class="left"><img src="img/qi_cn.png"></div>
+                    <div class="left"><img src="img/qi_btc.png"></div>
                     <div class="right">
                         <div class="bt">最新：<span><?= $btc_data['data']['list'][0]['drawIssue'] ?></span>期</div>
                         <div class="qis_but">
@@ -792,7 +795,7 @@ $btcnext_stamp *= 1000;
                                 </div>
                                 </div>
 
-                                <div class="tip">本站提供北京28、加拿大28预测，仅供参考</div>
+                                <div class="tip">本站提供宾果28、加拿大28预测，仅供参考</div>
                             </div>
                             <footer>Copyright©PC28网络科技有限公司</footer>
                     </div>
