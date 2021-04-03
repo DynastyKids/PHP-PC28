@@ -21,22 +21,30 @@ $canext_time = date('Y-m-d H:i:s', $canext_stamp / 1000 + 28800);
 // }
 // $bjnext_time = date('Y-m-d H:i:s', $bjnext_stamp / 1000 + 28800);
 // debug($bj_data);
-$bjnext_time = date_create_from_format('Y-m-d H:i:s', $bj_data['data'][0]['opentime']);
-if($bjnext_time == null){
-    $bjnext_time=getdate();
-}
-date_add($bjnext_time, new DateInterval('PT5M'));
-$bjnext_stamp = $bjnext_time->getTimestamp();
+// $bjnext_time = date_create_from_format('Y-m-d H:i:s', $bj_data['data'][0]['opentime']);
+$bjnext_stamp=strtotime($bj_data['data'][0]['opentime']);
+$bjnext_stamp+=300;
+$bjnext_time=date('Y-m-d H:i:s', $bjnext_stamp);
+debug($bjnext_time);
+// if($bjnext_time == null){
+    // $bjnext_time=getdate();
+// }
+// date_add($bjnext_time, new DateInterval('PT5M'));
+// $bjnext_stamp = $bj_data['data'][0]['opentime'];
+debug($bjnext_stamp);
 if (date('Hi', $bjnext_stamp) > 2355 && date('Hi', $bjnext_stamp) < 705) {
     date_add($bjnext_time, date_interval_create_from_date_string('420m'));
-    $bjnext_stamp = $bjnext_time->getTimestamp();
+    // $bjnext_stamp = $bjnext_time->getTimestamp();
+    // $bjnext_stamp = 
 }
 $bjnext_stamp = $bjnext_stamp * 1000;
 
 
 $btcnext_time = date_create_from_format('Y-m-d H:i:s', $btc_data['data']['list'][0]['drawTime']);
 date_add($btcnext_time, new DateInterval('PT1M'));
-$btcnext_stamp = $btcnext_time->getTimestamp();
+// $btcnext_stamp = $btcnext_time->getTimestamp();
+// debug($btc_data['data']['list'][0]['drawTime']);
+// debug($btcnext_time->getTimestamp());
 $btcnext_stamp *= 1000;
 
 // debug($bj_data['data'][0]['time']);
