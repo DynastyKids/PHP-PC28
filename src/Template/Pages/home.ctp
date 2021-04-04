@@ -838,7 +838,7 @@ $btcnext_stamp *= 1000;
                                 type: "get",
                                 dataType: "json",
                                 success: function(bj_d) {
-                                    console.log(bj_0.data[0].expect+":"+bj_d.data[0].expect);
+                                    //console.log(bj_0.data[0].expect+":"+bj_d.data[0].expect);
                                     if(bj_0.data[0].expect<bj_d.data[0].expect){
                                         if(document.getElementById("bj").style.display != "none"){
                                             window.location='./2';
@@ -908,18 +908,6 @@ $btcnext_stamp *= 1000;
                                 document.getElementById("cadivider").innerHTML = ""
                                 document.getElementById("casec1").innerHTML = "中";
                                 document.getElementById("casec2").innerHTML = "…";
-
-                                // setInterval(function() {
-                                //     //当前问题：倒计时到0后无法抓到新的数据
-                                //     var ca_current = <?= file_get_contents("http://144.202.119.241:9876/3.json"); ?>;
-                                //     // console.log(ca_0.data[0]);
-                                //     // console.log(ca_current.data[0]);
-                                //     if (ca_0.data[0].qihao != ca_current.data[0].qihao) {
-                                //         console.log("Different");
-                                //         // 根据当前tab决定是否reload
-                                //         // location.reload()
-                                //     }
-                                // }, 5000);
 
                                 setInterval(ca_getdata, 3000);
                             }
