@@ -821,7 +821,8 @@ $btcnext_stamp *= 1000;
                                     // console.log(ca_d.data[0].qihao);
                                     if(ca_d.data[0].qihao>ca_0.data[0].qihao){
                                         if(document.getElementById("jnd").style.display != "none"){
-                                            window.location='./1';
+                                            window.location.replace("http://www.testingstar.top:9876/1");
+                                            // window.location='./1';
                                         }
                                     }
                                 },
@@ -841,7 +842,8 @@ $btcnext_stamp *= 1000;
                                     //console.log(bj_0.data[0].expect+":"+bj_d.data[0].expect);
                                     if(bj_0.data[0].expect<bj_d.data[0].expect){
                                         if(document.getElementById("bj").style.display != "none"){
-                                            window.location='./2';
+                                            window.location.replace("http://www.testingstar.top:9876/2");
+                                            // window.location='./2';
                                         }
                                     }
                                 },
@@ -861,7 +863,8 @@ $btcnext_stamp *= 1000;
                                     // console.log(data.data.list[0].drawIssue);
                                     if(btc_0.data.list[0].drawIssue<data.data.list[0].drawIssue){
                                         if(document.getElementById("xjp").style.display != "none"){
-                                            window.location='./3';
+                                            window.location.replace("http://www.testingstar.top:9876/3");
+                                            // window.location='./3';
                                         }
                                     }
                                 },
