@@ -13,27 +13,27 @@ $btc_data = json_decode(file_get_contents($btc_datasource), true);
 $btc_data2 = json_decode(file_get_contents($btc_datasource2), true);
 
 $canext_stamp = $ca_data['data'][0]['time'] + 210000;
-if (date('Hi', $canext_stamp) >= 1100 && date('Hi', $canext_stamp) <= 1300) {
+if (date('Hi', $canext_stamp) >= 1157 && date('Hi', $canext_stamp) <= 1300) {
     $canext_stamp += 7200000;
 }
 $canext_time = date('Y-m-d H:i:s', $canext_stamp / 1000 + 28800);
 
-$bjnext_stamp = strtotime($bj_data['data'][0]['opentime']);
-$bjnext_stamp += 300;
-$bjnext_time = date('Y-m-d H:i:s', $bjnext_stamp);
+
+$bjnext_stamp=strtotime($bj_data['data'][0]['opentime']);
+$bjnext_stamp+=300;
+$bjnext_time=date('Y-m-d H:i:s', $bjnext_stamp);
 
 if (date('Hi', $bjnext_stamp) > 2355 && date('Hi', $bjnext_stamp) < 705) {
     date_add($bjnext_time, date_interval_create_from_date_string('420m'));
-    // $bjnext_stamp = $bjnext_time->getTimestamp();
-    // $bjnext_stamp = 
+
 }
 $bjnext_stamp = $bjnext_stamp * 1000;
 
 $btcnext_time = date_create_from_format('Y-m-d H:i:s', $btc_data['data']['list'][0]['drawTime']);
 date_add($btcnext_time, new DateInterval('PT1M'));
-// $btcnext_stamp = $btcnext_time->getTimestamp();
+
 $btcnext_stamp = strtotime($btc_data['data']['list'][0]['drawTime']);
-$btcnext_stamp += 60;
+$btcnext_stamp +=60;
 $btcnext_stamp *= 1000;
 ?>
 
@@ -188,9 +188,15 @@ $btcnext_stamp *= 1000;
                             <div class="t"><?= $btc_data['data']['list'][0]['drawIssue'] ?></div>
                             <ul>
                                 <li class="on"><?= $btc_data['data']['list'][0]['drawIssue'] ?></li>
-                                <?php for ($i = 1; $i < 15; $i++) {
+                                <?php for ($i = 1; $i < count($btc_data['data']['list']); $i++) {
                                     echo "<li>" . $btc_data['data']['list'][$i]['drawIssue'] . "</li>";
-                                } ?>
+                                } 
+                                if(count($btc_data['data']['list'])<15){
+                                    for ($i = 1; $i < 15; $i++) {
+                                        echo "<li>" . $btc_data2['data']['list'][$i]['drawIssue'] . "</li>";
+                                    } 
+                                }
+                                ?>
                             </ul>
                             <div class="next"></div>
                         </div>
@@ -436,7 +442,6 @@ $btcnext_stamp *= 1000;
                                                 <?php
                                                 $n0 = $n1 = $n2 = 0;
                                                 $n = explode(",", $bj_data['data'][$i]['opencode']);
-                                                exit;
                                                 for ($j = 0; $j < 6; $j++) {
                                                     $n0 += $n[$j];
                                                     $n1 += $n[$j + 6];
@@ -645,15 +650,16 @@ $btcnext_stamp *= 1000;
                                                     <td><?= str_replace(",", " + ", $btc_data['data']['list'][$i]['drawCode']) ?> = <?= $btc_data['data']['list'][$i]['result']['pc28_total'] ?></td>
                                                 </tr>
                                             <?php } ?>
-                                            <?php if (count($btc_data['data']['list']) < 100) {
-                                                for ($i = 0; $i < count($btc_data2['data']['list']); $i++) { ?>
-                                                    <tr>
-                                                        <td><?= $btc_data2['data']['list'][$i]['drawIssue'] ?></td>
-                                                        <td><?= $btc_data2['data']['list'][$i]['drawTime'] ?></td>
-                                                        <td><?= str_replace(",", " + ", $btc_data2['data']['list'][$i]['drawCode']) ?> = <?= $btc_data2['data']['list'][$i]['result']['pc28_total'] ?></td>
-                                                    </tr>
-                                            <?php }
-                                            } ?>
+                                            <?php if(count($btc_data['data']['list'])<100){?>
+                                                <?php for ($i = 0; $i < count($btc_data2['data']['list'])-count($btc_data['data']['list']); $i++) { ?>
+                                                <tr>
+                                                    <td><?= $btc_data2['data']['list'][$i]['drawIssue'] ?></td>
+                                                    <td><?= $btc_data2['data']['list'][$i]['drawTime'] ?></td>
+                                                    <td><?= str_replace(",", " + ", $btc_data2['data']['list'][$i]['drawCode']) ?> = <?= $btc_data2['data']['list'][$i]['result']['pc28_total'] ?></td>
+                                                </tr>
+                                            <?php } ?>
+                                            <?php }?>
+
                                         </tbody>
                                     </table>
                                 </div>
@@ -691,25 +697,24 @@ $btcnext_stamp *= 1000;
                                                             $bt4++;
                                                         }
                                                     }
-                                                }
-                                                if (count($btc_data['data']['list']) < 100) {
-                                                    for ($i = 0; $i < count($btc_data2['data']['list']); $i++) {
-                                                        if ($btc_data2['data']['list'][$i]['result']['pc28_total'] >= 14) {
-                                                            if ($btc_data2['data']['list'][$i]['result']['pc28_total'] % 2 != 0) {
-                                                                $bt1++;
-                                                            } else {
-                                                                $bt2++;
-                                                            }
+                                                } ?>
+                                                <?php if(count($btc_data['data']['list'])<100){
+                                                for ($i = 0; $i < count($btc_data2['data']['list'])-count($btc_data['data']['list']); $i++) {
+                                                    if ($btc_data2['data']['list'][$i]['result']['pc28_total'] >= 14) {
+                                                        if ($btc_data2['data']['list'][$i]['result']['pc28_total'] % 2 != 0) {
+                                                            $bt1++;
                                                         } else {
-                                                            if ($btc_data2['data']['list'][$i]['result']['pc28_total'] % 2 != 0) {
-                                                                $bt3++;
-                                                            } else {
-                                                                $bt4++;
-                                                            }
+                                                            $bt2++;
+                                                        }
+                                                    } else {
+                                                        if ($btc_data2['data']['list'][$i]['result']['pc28_total'] % 2 != 0) {
+                                                            $bt3++;
+                                                        } else {
+                                                            $bt4++;
                                                         }
                                                     }
-                                                }
-                                                ?>
+                                                } ?>
+                                                <?php }?>
                                                 <th>间隔</th>
                                                 <th></th>
                                                 <th><?= $bt1 + $bt2 ?></th>
@@ -750,40 +755,40 @@ $btcnext_stamp *= 1000;
                                                         }
                                                     } ?>
                                                 </tr>
-                                                <?php }
-                                            if (count($btc_data['data']['list']) < 100) {
-                                                for ($i = 0; $i < count($btc_data2['data']['list']); $i++) { ?>
-                                                    <tr>
-                                                        <td><?= $btc_data2['data']['list'][$i]['drawIssue'] ?></td>
-                                                        <td><?= $btc_data2['data']['list'][$i]['result']['pc28_total'] ?></td>
-                                                        <?php if ($btc_data2['data']['list'][$i]['result']['pc28_total'] >= 14) {
-                                                            echo "<td><span class='icon'>大</span></td><td></td>";
-                                                        } else {
-                                                            echo "<td></td><td><span class='icon'>小</span></td>";
-                                                        } ?>
-                                                        <?php if ($btc_data2['data']['list'][$i]['result']['pc28_total'] % 2 != 0) {
-                                                            echo "<td><span class='icon'>单</span></td><td></td>";
-                                                        } else {
-                                                            echo "<td></td><td><span class='icon'>双</span></td>";
-                                                        } ?>
+                                            <?php } ?>
 
-                                                        <?php if ($btc_data2['data']['list'][$i]['result']['pc28_total'] >= 14) {
-                                                            if ($btc_data2['data']['list'][$i]['result']['pc28_total'] % 2 != 0) {
-                                                                echo "<td class='er'><span class='icon'>大单</span></td><td></td><td></td><td></td>";
-                                                            } else {
-                                                                echo "<td></td><td class='er'><span class='icon'>大双</span></td><td></td><td></td>";
-                                                            }
+                                            <?php if (count($btc_data['data']['list'])<100){?>
+                                                <?php for ($i = 0; $i < count($btc_data2['data']['list'])-count($btc_data['data']['list']); $i++) { ?>
+                                                <tr>
+                                                    <td><?= $btc_data2['data']['list'][$i]['drawIssue'] ?></td>
+                                                    <td><?= $btc_data2['data']['list'][$i]['result']['pc28_total'] ?></td>
+                                                    <?php if ($btc_data2['data']['list'][$i]['result']['pc28_total'] >= 14) {
+                                                        echo "<td><span class='icon'>大</span></td><td></td>";
+                                                    } else {
+                                                        echo "<td></td><td><span class='icon'>小</span></td>";
+                                                    } ?>
+                                                    <?php if ($btc_data2['data']['list'][$i]['result']['pc28_total'] % 2 != 0) {
+                                                        echo "<td><span class='icon'>单</span></td><td></td>";
+                                                    } else {
+                                                        echo "<td></td><td><span class='icon'>双</span></td>";
+                                                    } ?>
+
+                                                    <?php if ($btc_data2['data']['list'][$i]['result']['pc28_total'] >= 14) {
+                                                        if ($btc_data2['data']['list'][$i]['result']['pc28_total'] % 2 != 0) {
+                                                            echo "<td class='er'><span class='icon'>大单</span></td><td></td><td></td><td></td>";
                                                         } else {
-                                                            if ($btc_data2['data']['list'][$i]['result']['pc28_total'] % 2 != 0) {
-                                                                echo "<td></td><td></td><td class='er'><span class='icon'>小单</span></td><td></td>";
-                                                            } else {
-                                                                echo "<td></td><td></td><td></td><td class='er'><span class='icon'>小双</span></td>";
-                                                            }
-                                                        } ?>
-                                                    </tr>
-                                            <?php }
-                                            }
-                                            ?>
+                                                            echo "<td></td><td class='er'><span class='icon'>大双</span></td><td></td><td></td>";
+                                                        }
+                                                    } else {
+                                                        if ($btc_data2['data']['list'][$i]['result']['pc28_total'] % 2 != 0) {
+                                                            echo "<td></td><td></td><td class='er'><span class='icon'>小单</span></td><td></td>";
+                                                        } else {
+                                                            echo "<td></td><td></td><td></td><td class='er'><span class='icon'>小双</span></td>";
+                                                        }
+                                                    } ?>
+                                                </tr>
+                                            <?php } ?>
+                                            <?php }?>
                                         </tbody>
                                     </table>
                                 </div>
@@ -798,7 +803,7 @@ $btcnext_stamp *= 1000;
                                             </tr>
                                         </thead>
                                         <tbody id="xjpgameforecastlist">
-                                            <?php $btc_predictdata = TableRegistry::getTableLocator()->get('btc')->find()->orderDesc('id')->limit(110)->toArray(); ?>
+                                            <?php $btc_predictdata = TableRegistry::getTableLocator()->get('btc')->find()->orderDesc('id')->limit(200)->toArray(); ?>
                                             <tr>
                                                 <td><?= $btc_data['data']['list'][0]['drawIssue'] + 1 ?></td>
                                                 <td>--- 预测仅供参考 ---</td>
@@ -816,7 +821,7 @@ $btcnext_stamp *= 1000;
                                                 </td>
                                                 <td></td>
                                             </tr>
-                                            <?php for ($i = 0; $i < count($btc_data['data']['list']); $i++) { ?>
+                                            <?php for ($i = 1; $i < count($btc_data['data']['list']); $i++) { ?>
                                                 <tr>
                                                     <td><?= $btc_data['data']['list'][$i]['drawIssue'] ?></td>
                                                     <td><?= str_replace(",", " + ", $btc_data['data']['list'][$i]['drawCode']) ?> = <?= $btc_data['data']['list'][$i]['result']['pc28_total'] ?></td>
@@ -845,6 +850,38 @@ $btcnext_stamp *= 1000;
                                                     </td>
                                                 </tr>
                                             <?php } ?>
+
+                                            <?php if(count($btc_data['data']['list'])<100){?>
+                                                <?php for ($i = 1; $i < count($btc_data2['data']['list'])-count($btc_data['data']['list']); $i++) { ?>
+                                                <tr>
+                                                    <td><?= $btc_data2['data']['list'][$i]['drawIssue'] ?></td>
+                                                    <td><?= str_replace(",", " + ", $btc_data2['data']['list'][$i]['drawCode']) ?> = <?= $btc_data2['data']['list'][$i]['result']['pc28_total'] ?></td>
+                                                    <td>
+                                                        <?php if ($btc_predictdata[$i + 1]['pred_size'] == 1) {
+                                                            echo "大 | ";
+                                                        } else {
+                                                            echo "小 | ";
+                                                        } ?>
+                                                        <?php if ($btc_predictdata[$i + 1]['pred_odd'] == 1) {
+                                                            echo "单";
+                                                        } else {
+                                                            echo "双";
+                                                        } ?>
+                                                    </td>
+                                                    <td>
+                                                        <?php if ($btc_data2['data']['list'][$i]['result']['pc28_total'] % 2 == $btc_predictdata[$i]['pred_odd']) {
+                                                            echo $this->Html->image('icon_yes.png', ['alt' => '']);
+                                                        } else if ($btc_data2['data']['list'][$i]['result']['pc28_total'] < 14 && $btc_predictdata[$i]['pred_size'] == 0) {
+                                                            echo $this->Html->image('icon_yes.png', ['alt' => '']);
+                                                        } else if ($btc_data2['data']['list'][$i]['result']['pc28_total'] >= 14 && $btc_predictdata[$i]['pred_size'] == 1) {
+                                                            echo $this->Html->image('icon_yes.png', ['alt' => '']);
+                                                        } else {
+                                                            echo $this->Html->image('icon_no.png', ['alt' => '']);
+                                                        } ?>
+                                                    </td>
+                                                </tr>
+                                            <?php } ?>
+                                            <?php }?>
                                         </tbody>
                                     </table>
                                 </div>
@@ -857,67 +894,62 @@ $btcnext_stamp *= 1000;
 
                     <script>
                         var ca_0 = <?= json_encode($ca_data); ?>;
-
                         function ca_getdata() {
                             $.ajax({
                                 url: "js/1.js",
-                                // url: "http://testingstar.top:9876/28ca/3.json",
                                 type: "get",
                                 dataType: "json",
                                 success: function(ca_d) {
                                     // console.log(ca_d.data[0].qihao);
-                                    if (ca_d.data[0].qihao > ca_0.data[0].qihao) {
-                                        if (document.getElementById("jnd").style.display != "none") {
+                                    if(ca_d.data[0].qihao>ca_0.data[0].qihao){
+                                        if(document.getElementById("jnd").style.display != "none"){
                                             window.location.replace("http://www.testingstar.top:8765/1");
-                                            // window.location='./1';
                                         }
                                     }
                                 },
-                                error: function(XMLHttpRequest, textStatus, errorThrown) {},
+                                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                                },
                             })
                         }
                     </script>
                     <script>
                         var bj_0 = <?= json_encode($bj_data); ?>;
-
                         function bj_getdata() {
                             $.ajax({
                                 url: "js/2.js",
-                                // url: "http://testingstar.top:9876/28tw/3.json",
                                 type: "get",
                                 dataType: "json",
                                 success: function(bj_d) {
                                     //console.log(bj_0.data[0].expect+":"+bj_d.data[0].expect);
-                                    if (bj_0.data[0].expect < bj_d.data[0].expect) {
-                                        if (document.getElementById("bj").style.display != "none") {
+                                    if(bj_0.data[0].expect<bj_d.data[0].expect){
+                                        if(document.getElementById("bj").style.display != "none"){
                                             window.location.replace("http://www.testingstar.top:8765/2");
-                                            // window.location='./2';
                                         }
                                     }
                                 },
-                                error: function(XMLHttpRequest, textStatus, errorThrown) {},
+                                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                                },
                             })
                         }
                     </script>
                     <script>
-                        var btc_0 = <?= json_encode($btc_data); ?>;
-
+                    var btc_0 = <?= json_encode($btc_data); ?>;
                         function btc_getdata() {
                             $.ajax({
                                 url: "js/3.js",
-                                // url:"http://testingstar.top:9876/28btc/1.json",
                                 type: "get",
                                 dataType: "json",
                                 success: function(data) {
                                     // console.log(data.data.list[0].drawIssue);
-                                    if (btc_0.data.list[0].drawIssue < data.data.list[0].drawIssue) {
-                                        if (document.getElementById("xjp").style.display != "none") {
+                                    if(btc_0.data.list[0].drawIssue<data.data.list[0].drawIssue){
+                                        if(document.getElementById("xjp").style.display != "none"){
                                             window.location.replace("http://www.testingstar.top:8765/3");
                                             // window.location='./3';
                                         }
                                     }
                                 },
-                                error: function(XMLHttpRequest, textStatus, errorThrown) {},
+                                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                                },
                             })
                         }
                     </script>
