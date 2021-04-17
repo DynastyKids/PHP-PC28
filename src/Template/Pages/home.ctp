@@ -3,14 +3,33 @@
 use Cake\ORM\TableRegistry;
 
 $ca_datasource = "http://testingstar.top:9876/28ca/3.json";
-$bj_datasource = "http://testingstar.top:9876/28tw/3.json";
-$btc_datasource = "http://testingstar.top:9876/28btc/1.json";
-$btc_datasource2 = "http://testingstar.top:9876/28btc/2.json";
-
 $ca_data = json_decode(file_get_contents($ca_datasource), true);
+if($ca_data==null){
+    $ca_datasource = "http://testingstar.top:9876/28ca/33.json";
+    $ca_data = json_decode(file_get_contents($ca_datasource), true);
+}
+
+$bj_datasource = "http://testingstar.top:9876/28tw/3.json";
 $bj_data = json_decode(file_get_contents($bj_datasource), true);
+if ($bj_data==null){
+    $bj_datasource = "http://testingstar.top:9876/28tw/2_2.json";
+    $bj_data = json_decode(file_get_contents($bj_datasource), true);
+}
+
+$btc_datasource = "http://testingstar.top:9876/28btc/1.json";
 $btc_data = json_decode(file_get_contents($btc_datasource), true);
+if ($btc_data==null){
+    $btc_datasource = "http://testingstar.top:9876/28btc/11.json";
+    $btc_data = json_decode(file_get_contents($btc_datasource), true);
+}
+
+$btc_datasource2 = "http://testingstar.top:9876/28btc/2.json";
 $btc_data2 = json_decode(file_get_contents($btc_datasource2), true);
+if ($btc_data2==null){
+    $btc_datasource2 = "http://testingstar.top:9876/28btc/2_2.json";
+    $btc_data2 = json_decode(file_get_contents($btc_datasource2), true);
+}
+
 
 if ($ca_data != null) {
     $canext_stamp = $ca_data['data'][0]['time'] + 210000;
