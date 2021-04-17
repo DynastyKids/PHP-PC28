@@ -167,7 +167,7 @@ $this->layout = false;
                         </dl>
                     </div>
                 <?php } else {
-                    echo "<h1 style='font-size:150%'> Data disagree </h1>";
+                    echo "<h1 id='ca_disagree' style='font-size:150%'> Data disagree </h1>";
                 }?>
             </div>
             <div id="qi_bj">
@@ -231,7 +231,7 @@ $this->layout = false;
                         </dl>
                     </div>
                 <?php } else {
-                    echo "<h1 style='font-size:150%'> Data disagree </h1>";
+                    echo "<h1 id='bj_disagree' style='font-size:150%'> Data disagree </h1>";
                 }?>
             </div>
             <div id="qi_xjp">
@@ -293,7 +293,7 @@ $this->layout = false;
                         </dl>
                     </div>
                 <?php } else {
-                    echo "<h1 style='font-size:150%'> Data disagree </h1>";
+                    echo "<h1 id='btc_disagree' style='font-size:150%'> Data disagree </h1>";
                 }?>
             </div>
         </div>
@@ -1134,6 +1134,21 @@ $this->layout = false;
             setInterval(btc_getdata, 3000);
         }
     }, 1000);
+</script>
+<script>
+    var t = setInterval(function(){
+        if (document.getElementById("jnd").style.display != "none" && document.getElemementById('ca_disagree').innerHTML != "") {
+                window.location.replace("http://www.testingstar.top:8765/1");
+        }
+
+        if (document.getElementById("bj").style.display != "none" && document.getElemementById('bj_disagree').innerHTML != "") {
+                window.location.replace("http://www.testingstar.top:8765/2");
+        }
+        
+        if (document.getElementById("xjp").style.display != "none" && document.getElemementById('btc_disagree').innerHTML != "") {
+                window.location.replace("http://www.testingstar.top:8765/3");
+        }
+    },4000);
 </script>
 
 </html>
