@@ -1047,7 +1047,7 @@ $this->layout = false;
             document.getElementById("casec1").innerHTML = "中";
             document.getElementById("casec2").innerHTML = "…";
 
-            setInterval(ca_getdata, 3000);
+            setInterval(ca_getdata, 5000);
         }
     }, 1000);
 </script>
@@ -1091,7 +1091,7 @@ $this->layout = false;
             document.getElementById("bjsec1").innerHTML = "中";
             document.getElementById("bjsec2").innerHTML = "…";
 
-            setInterval(bj_getdata, 3000);
+            setInterval(bj_getdata, 5000);
         }
     }, 1000);
 </script>
