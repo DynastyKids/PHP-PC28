@@ -1167,5 +1167,10 @@ $this->layout = false;
         }
     },3000);
 </script>
+<script>
+setTimeout(function(){
+    location.reload(); 
+}, 14400000);
+</script>
 
 </html>
