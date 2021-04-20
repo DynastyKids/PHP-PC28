@@ -1139,7 +1139,7 @@ $this->layout = false;
     var ca_disagree = setInterval(function(){
         console.log("CA_Refresh");
         if (document.getElementById("jnd").style.display != "none"){
-            if(document.getElemementById('ca_disagree').innerHTML != "") {
+            if(document.getElemementById("ca_disagree").innerHTML != "") {
                 window.location.replace("http://www.testingstar.top:8765/1");
                 
             }
@@ -1149,7 +1149,7 @@ $this->layout = false;
     var bj_disagree = setInterval(function(){
         console.log("Bj_Refresh");
         if (document.getElementById("bj").style.display != "none"){
-            if(document.getElemementById('bj_disagree').innerHTML != "") {
+            if(document.getElemementById("bj_disagree").innerHTML != "") {
                 window.location.replace("http://www.testingstar.top:8765/2");
                 
             }
@@ -1159,7 +1159,7 @@ $this->layout = false;
     var btc_disagree = setInterval(function(){
         console.log("BTC_Refresh");
         if (document.getElementById("xjp").style.display != "none"){
-            if(document.getElemementById('btc_disagree').innerHTML != "") {
+            if(document.getElemementById("btc_disagree").innerHTML != "") {
                 window.location.replace("http://www.testingstar.top:8765/3");
                 
             }
