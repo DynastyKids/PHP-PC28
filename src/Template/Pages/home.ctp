@@ -1136,19 +1136,35 @@ $this->layout = false;
     }, 1000);
 </script>
 <script>
-    var t = setInterval(function(){
-        if (document.getElementById("jnd").style.display != "none" && document.getElemementById('ca_disagree').innerHTML != "") {
+    var ca_disagree = setInterval(function(){
+        console.log("CA_Refresh");
+        if (document.getElementById("jnd").style.display != "none"){
+            if(document.getElemementById('ca_disagree').innerHTML != "") {
                 window.location.replace("http://www.testingstar.top:8765/1");
+                
+            }
         }
+    },3000);
 
-        if (document.getElementById("bj").style.display != "none" && document.getElemementById('bj_disagree').innerHTML != "") {
+    var bj_disagree = setInterval(function(){
+        console.log("Bj_Refresh");
+        if (document.getElementById("bj").style.display != "none"){
+            if(document.getElemementById('bj_disagree').innerHTML != "") {
                 window.location.replace("http://www.testingstar.top:8765/2");
+                
+            }
         }
+    },3000);
         
-        if (document.getElementById("xjp").style.display != "none" && document.getElemementById('btc_disagree').innerHTML != "") {
+    var btc_disagree = setInterval(function(){
+        console.log("BTC_Refresh");
+        if (document.getElementById("xjp").style.display != "none"){
+            if(document.getElemementById('btc_disagree').innerHTML != "") {
                 window.location.replace("http://www.testingstar.top:8765/3");
+                
+            }
         }
-    },4000);
+    },3000);
 </script>
 
 </html>
