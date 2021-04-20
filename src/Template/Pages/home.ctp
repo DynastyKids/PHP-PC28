@@ -1009,11 +1009,11 @@ $this->layout = false;
     }
 </script>
 
-
 <script>
     var ca_0 = <?= json_encode($ca_data); ?>;
 
-    var x = setInterval(function() {
+    var ca_countdown = setInterval(function() {
+        setTimeout(function(){}, 0);
         var now = new Date().getTime();
         var distance = "<?= $canext_stamp ?>" - now;
 
@@ -1057,7 +1057,8 @@ $this->layout = false;
     // var bj_init=bj_0.data[0].expect;
 
     // bj_display
-    var y = setInterval(function() {
+    var bj_countdown = setInterval(function() {
+        setTimeout(function(){}, 0);
         var now = new Date().getTime() + 28800000;
         var distance = "<?= $bjnext_stamp ?>" - now;
 
@@ -1100,7 +1101,8 @@ $this->layout = false;
     var btc_0 = <?= json_encode($btc_data); ?>;
     // var btc_init=btc_0.data.list[0].drawIssue
     // btc1f_display
-    var z = setInterval(function() {
+    var btc_countdown = setInterval(function() {
+        setTimeout(function(){}, 0);
         var now = new Date().getTime() + 28800000;
         var distance = "<?= $btcnext_stamp ?>" - now;
 
@@ -1137,7 +1139,6 @@ $this->layout = false;
 </script>
 <script>
     var ca_disagree = setInterval(function(){
-        console.log("CA_Refresh");
         if (document.getElementById("jnd").style.display != "none"){
             if(document.getElemementById("ca_disagree").innerHTML != "") {
                 window.location.replace("http://www.testingstar.top:8765/1");
@@ -1145,9 +1146,9 @@ $this->layout = false;
             }
         }
     },3000);
-
+</script>
+<script>
     var bj_disagree = setInterval(function(){
-        console.log("Bj_Refresh");
         if (document.getElementById("bj").style.display != "none"){
             if(document.getElemementById("bj_disagree").innerHTML != "") {
                 window.location.replace("http://www.testingstar.top:8765/2");
@@ -1155,9 +1156,9 @@ $this->layout = false;
             }
         }
     },3000);
-        
+</script>
+<script>
     var btc_disagree = setInterval(function(){
-        console.log("BTC_Refresh");
         if (document.getElementById("xjp").style.display != "none"){
             if(document.getElemementById("btc_disagree").innerHTML != "") {
                 window.location.replace("http://www.testingstar.top:8765/3");
