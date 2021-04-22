@@ -33,9 +33,6 @@ if ($btc_data2==null){
 
 if ($ca_data != null) {
     $canext_stamp = $ca_data['data'][0]['time'] + 210000;
-    if (date('Hi', $canext_stamp) >= 1157 && date('Hi', $canext_stamp) <= 1300) {
-        $canext_stamp += 7200000;
-    }
     $canext_time = date('Y-m-d H:i:s', $canext_stamp / 1000 + 28800);
 }
 
@@ -43,11 +40,6 @@ if ($bj_data != null) {
     $bjnext_stamp = strtotime($bj_data['data'][0]['opentime']);
     $bjnext_stamp += 300;
     $bjnext_time = date('Y-m-d H:i:s', $bjnext_stamp);
-
-
-    if (date('Hi', $bjnext_stamp) > 2355 && date('Hi', $bjnext_stamp) < 705) {
-        date_add($bjnext_time, date_interval_create_from_date_string('420m'));
-    }
     $bjnext_stamp = $bjnext_stamp * 1000;
 }
 
@@ -61,7 +53,6 @@ if ($bj_data != null) {
 }
 
 $this->layout = false;
-
 ?>
 <!DOCTYPE html>
 <html>
