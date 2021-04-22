@@ -1007,27 +1007,19 @@ $this->layout = false;
         setTimeout(function(){}, 0);
         var now = new Date().getTime();
         var distance = "<?= $canext_stamp ?>" - now;
+        
+        if(distance > 180000){
+            distance = 180000;
+        }
 
-        var hours = Math.floor(distance / (1000 * 60 * 60));
-        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var minutes = Math.floor(distance / (1000 * 60));
         var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-        // Display the result in the element with id="demo"
-        //   document.getElementById("min1").innerHTML=now
-        //   document.getElementById("min2").innerHTML=
-        if (hours > 0) {
-            document.getElementById("camin1").innerHTML = Math.floor(hours / 10);
-            document.getElementById("camin2").innerHTML = hours % 10;
-            document.getElementById("cadivider").innerHTML = ":"
-            document.getElementById("casec1").innerHTML = Math.floor(minutes / 10);
-            document.getElementById("casec2").innerHTML = minutes % 10;
-        } else {
-            document.getElementById("camin1").innerHTML = Math.floor(minutes / 10);
-            document.getElementById("camin2").innerHTML = minutes % 10;
-            document.getElementById("cadivider").innerHTML = ":"
-            document.getElementById("casec1").innerHTML = Math.floor(seconds / 10);
-            document.getElementById("casec2").innerHTML = seconds % 10;
-        }
+        document.getElementById("camin1").innerHTML = Math.floor(minutes / 10);
+        document.getElementById("camin2").innerHTML = minutes % 10;
+        document.getElementById("cadivider").innerHTML = ":"
+        document.getElementById("casec1").innerHTML = Math.floor(seconds / 10);
+        document.getElementById("casec2").innerHTML = seconds % 10;
 
         // If the count down is finished, write some text
         if (distance < 0) {
@@ -1053,26 +1045,18 @@ $this->layout = false;
         var now = new Date().getTime() + 28800000;
         var distance = "<?= $bjnext_stamp ?>" - now;
 
-        var hours = Math.floor(distance / (1000 * 60 * 60));
+        if(distance > 300000){
+            distance = 300000;
+        }
+
         var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
         var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-        // Display the result in the element with id="demo"
-        //   document.getElementById("min1").innerHTML=now
-        //   document.getElementById("min2").innerHTML=
-        if (hours > 0) {
-            document.getElementById("bjmin1").innerHTML = Math.floor(hours / 10);
-            document.getElementById("bjmin2").innerHTML = hours % 10;
-            document.getElementById("bjdivider").innerHTML = ":"
-            document.getElementById("bjsec1").innerHTML = Math.floor(minutes / 10);
-            document.getElementById("bjsec2").innerHTML = minutes % 10;
-        } else {
-            document.getElementById("bjmin1").innerHTML = Math.floor(minutes / 10);
-            document.getElementById("bjmin2").innerHTML = minutes % 10;
-            document.getElementById("bjdivider").innerHTML = ":"
-            document.getElementById("bjsec1").innerHTML = Math.floor(seconds / 10);
-            document.getElementById("bjsec2").innerHTML = seconds % 10;
-        }
+        
+        document.getElementById("bjmin1").innerHTML = Math.floor(minutes / 10);
+        document.getElementById("bjmin2").innerHTML = minutes % 10;
+        document.getElementById("bjdivider").innerHTML = ":"
+        document.getElementById("bjsec1").innerHTML = Math.floor(seconds / 10);
+        document.getElementById("bjsec2").innerHTML = seconds % 10;
 
         // If the count down is finished, write some text
         if (distance < 0) {
@@ -1097,23 +1081,18 @@ $this->layout = false;
         var now = new Date().getTime() + 28800000;
         var distance = "<?= $btcnext_stamp ?>" - now;
 
-        var hours = Math.floor(distance / (1000 * 60 * 60));
-        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        if(distance > 60000){
+            distance = 60000;
+        }
+
+        var minutes = Math.floor(distance / (1000 * 60));
         var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-        if (hours > 0) {
-            document.getElementById("btcmin1").innerHTML = Math.floor(hours / 10);
-            document.getElementById("btcmin2").innerHTML = hours % 10;
-            document.getElementById("btcdivider").innerHTML = ":"
-            document.getElementById("btcsec1").innerHTML = Math.floor(minutes / 10);
-            document.getElementById("btcsec2").innerHTML = minutes % 10;
-        } else {
-            document.getElementById("btcmin1").innerHTML = Math.floor(minutes / 10);
-            document.getElementById("btcmin2").innerHTML = minutes % 10;
-            document.getElementById("btcdivider").innerHTML = ":"
-            document.getElementById("btcsec1").innerHTML = Math.floor(seconds / 10);
-            document.getElementById("btcsec2").innerHTML = seconds % 10;
-        }
+        document.getElementById("btcmin1").innerHTML = Math.floor(minutes / 10);
+        document.getElementById("btcmin2").innerHTML = minutes % 10;
+        document.getElementById("btcdivider").innerHTML = ":"
+        document.getElementById("btcsec1").innerHTML = Math.floor(seconds / 10);
+        document.getElementById("btcsec2").innerHTML = seconds % 10;
 
         // If the count down is finished, write some text
         if (distance < 0) {
