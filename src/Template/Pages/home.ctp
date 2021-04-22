@@ -1008,8 +1008,8 @@ $this->layout = false;
         var now = new Date().getTime();
         var distance = "<?= $canext_stamp ?>" - now;
         
-        if(distance > 180000){
-            distance = 180000;
+        if(distance > 210000){
+            distance = 210000;
         }
 
         var minutes = Math.floor(distance / (1000 * 60));
