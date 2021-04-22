@@ -1040,7 +1040,7 @@ $this->layout = false;
 
         // If the count down is finished, write some text
         if (distance < 0) {
-            clearInterval(x);
+            clearInterval(ca_countdown);
             document.getElementById("camin1").innerHTML = "开";
             document.getElementById("camin2").innerHTML = "奖";
             document.getElementById("cadivider").innerHTML = ""
@@ -1085,7 +1085,7 @@ $this->layout = false;
 
         // If the count down is finished, write some text
         if (distance < 0) {
-            clearInterval(y);
+            clearInterval(bj_countdown);
             document.getElementById("bjmin1").innerHTML = "开";
             document.getElementById("bjmin2").innerHTML = "奖";
             document.getElementById("bjdivider").innerHTML = ""
@@ -1126,7 +1126,7 @@ $this->layout = false;
 
         // If the count down is finished, write some text
         if (distance < 0) {
-            clearInterval(z);
+            clearInterval(btc_countdown);
             document.getElementById("btcmin1").innerHTML = "开";
             document.getElementById("btcmin2").innerHTML = "奖";
             document.getElementById("btcdivider").innerHTML = ""
@@ -1169,11 +1169,6 @@ $this->layout = false;
             }
         }
     },4000);
-</script>
-<script>
-setTimeout(function(){
-    location.reload(); 
-}, 21600000);
 </script>
 
 </html>
