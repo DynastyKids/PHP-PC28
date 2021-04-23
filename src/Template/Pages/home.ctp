@@ -4,28 +4,28 @@ use Cake\ORM\TableRegistry;
 
 $ca_datasource = "http://testingstar.top:9876/28ca/3.json";
 $ca_data = json_decode(file_get_contents($ca_datasource), true);
-if($ca_data==null){
+if ($ca_data == null) {
     $ca_datasource = "http://testingstar.top:9876/28ca/33.json";
     $ca_data = json_decode(file_get_contents($ca_datasource), true);
 }
 
 $bj_datasource = "http://testingstar.top:9876/28tw/3.json";
 $bj_data = json_decode(file_get_contents($bj_datasource), true);
-if ($bj_data==null){
+if ($bj_data == null) {
     $bj_datasource = "http://testingstar.top:9876/28tw/2_2.json";
     $bj_data = json_decode(file_get_contents($bj_datasource), true);
 }
 
 $btc_datasource = "http://testingstar.top:9876/28btc/1.json";
 $btc_data = json_decode(file_get_contents($btc_datasource), true);
-if ($btc_data==null){
+if ($btc_data == null) {
     $btc_datasource = "http://testingstar.top:9876/28btc/11.json";
     $btc_data = json_decode(file_get_contents($btc_datasource), true);
 }
 
 $btc_datasource2 = "http://testingstar.top:9876/28btc/2.json";
 $btc_data2 = json_decode(file_get_contents($btc_datasource2), true);
-if ($btc_data2==null){
+if ($btc_data2 == null) {
     $btc_datasource2 = "http://testingstar.top:9876/28btc/2_2.json";
     $btc_data2 = json_decode(file_get_contents($btc_datasource2), true);
 }
@@ -157,9 +157,16 @@ $this->layout = false;
                             </dt>
                         </dl>
                     </div>
-                <?php } else {
-                    echo "<h1 id='ca_disagree' style='font-size:150%'> Data disagree </h1>";
-                }?>
+                <?php } else { ?>
+                    <h1 id='ca_disagree' style='font-size:150%'> 数据异常，3秒后刷新重试…… </h1>
+                    <script>
+                        setTimeout(function() {
+                            if (document.getElementById("jnd").style.display != "none") {
+                                window.location.replace("http://www.testingstar.top:8765/1");
+                            }
+                        }, 3000);
+                    </script>
+                <?php } ?>
             </div>
             <div id="qi_bj">
                 <?php if ($bj_data != null) { ?>
@@ -221,9 +228,16 @@ $this->layout = false;
                                 } ?></dt>
                         </dl>
                     </div>
-                <?php } else {
-                    echo "<h1 id='bj_disagree' style='font-size:150%'> Data disagree </h1>";
-                }?>
+                <?php } else { ?>
+                    <h1 id='bj_disagree' style='font-size:150%'>数据异常，3秒后刷新重试……</h1>
+                    <script>
+                        setTimeout(function() {
+                            if (document.getElementById("bj").style.display != "none") {
+                                window.location.replace("http://www.testingstar.top:8765/2");
+                            }
+                        }, 3500);
+                    </script>
+                <?php } ?>
             </div>
             <div id="qi_xjp">
                 <?php if ($btc_data != null) { ?>
@@ -283,9 +297,17 @@ $this->layout = false;
                                 } ?></dt>
                         </dl>
                     </div>
-                <?php } else {
-                    echo "<h1 id='btc_disagree' style='font-size:150%'> Data disagree </h1>";
-                }?>
+                <?php } else { ?>
+                    <h1 id='btc_disagree' style='font-size:150%'>数据异常，3秒后刷新重试……</h1>
+                    <script>
+                        setTimeout(function() {
+                            if (document.getElementById("xjp").style.display != "none") {
+                                window.location.replace("http://www.testingstar.top:8765/3");
+                            }
+                        }, 3500);
+                    </script>
+
+                <?php } ?>
             </div>
         </div>
 
@@ -1004,11 +1026,11 @@ $this->layout = false;
     var ca_0 = <?= json_encode($ca_data); ?>;
 
     var ca_countdown = setInterval(function() {
-        setTimeout(function(){}, 0);
+        setTimeout(function() {}, 0);
         var now = new Date().getTime();
         var distance = "<?= $canext_stamp ?>" - now;
-        
-        if(distance > 210000){
+
+        if (distance > 210000) {
             distance = 210000;
         }
 
@@ -1041,17 +1063,17 @@ $this->layout = false;
 
     // bj_display
     var bj_countdown = setInterval(function() {
-        setTimeout(function(){}, 0);
+        setTimeout(function() {}, 0);
         var now = new Date().getTime() + 28800000;
         var distance = "<?= $bjnext_stamp ?>" - now;
 
-        if(distance > 300000){
+        if (distance > 300000) {
             distance = 300000;
         }
 
         var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
         var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-        
+
         document.getElementById("bjmin1").innerHTML = Math.floor(minutes / 10);
         document.getElementById("bjmin2").innerHTML = minutes % 10;
         document.getElementById("bjdivider").innerHTML = ":"
@@ -1077,11 +1099,11 @@ $this->layout = false;
     // var btc_init=btc_0.data.list[0].drawIssue
     // btc1f_display
     var btc_countdown = setInterval(function() {
-        setTimeout(function(){}, 0);
+        setTimeout(function() {}, 0);
         var now = new Date().getTime() + 28800000;
         var distance = "<?= $btcnext_stamp ?>" - now;
 
-        if(distance > 60000){
+        if (distance > 60000) {
             distance = 60000;
         }
 
@@ -1106,39 +1128,6 @@ $this->layout = false;
             setInterval(btc_getdata, 3000);
         }
     }, 1000);
-</script>
-<script>
-    var ca_disagree = setInterval(function(){
-        setTimeout(function(){}, 0);
-        if (document.getElementById("jnd").style.display != "none"){
-            if(document.getElemementById("ca_disagree").innerHTML != "") {
-                window.location.replace("http://www.testingstar.top:8765/1");
-                
-            }
-        }
-    },5000);
-</script>
-<script>
-    var bj_disagree = setInterval(function(){
-        setTimeout(function(){}, 0);
-        if (document.getElementById("bj").style.display != "none"){
-            if(document.getElemementById("bj_disagree").innerHTML != "") {
-                window.location.replace("http://www.testingstar.top:8765/2");
-                
-            }
-        }
-    },5000);
-</script>
-<script>
-    var btc_disagree = setInterval(function(){
-        setTimeout(function(){}, 0);
-        if (document.getElementById("xjp").style.display != "none"){
-            if(document.getElemementById("btc_disagree").innerHTML != "") {
-                window.location.replace("http://www.testingstar.top:8765/3");
-                
-            }
-        }
-    },4000);
 </script>
 
 </html>
