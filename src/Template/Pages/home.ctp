@@ -30,6 +30,8 @@ if ($btc_data2 == null) {
     $btc_data2 = json_decode(file_get_contents($btc_datasource2), true);
 }
 
+$btc_data=null;
+
 
 if ($ca_data != null) {
     $canext_stamp = $ca_data['data'][0]['time'] + 210000;
@@ -43,7 +45,7 @@ if ($bj_data != null) {
     $bjnext_stamp = $bjnext_stamp * 1000;
 }
 
-if ($bj_data != null) {
+if ($btc_data != null) {
     $btcnext_time = date_create_from_format('Y-m-d H:i:s', $btc_data['data']['list'][0]['drawTime']);
     date_add($btcnext_time, new DateInterval('PT1M'));
 
@@ -157,11 +159,13 @@ $this->layout = false;
                             </dt>
                         </dl>
                     </div>
+
                 <?php } else { ?>
                     <h1 id='ca_disagree' style='font-size:150%'> 数据异常，3秒后刷新重试…… </h1>
                     <script>
-                        setTimeout(function() {
-                            if (document.getElementById("jnd").style.display != "none") {
+                        var refresh_ca = setInterval(function() {
+                            setTimeout(function() {}, 0);
+                            if (document.getElementById("qi_jnd").style.display == "block") {
                                 window.location.replace("http://www.testingstar.top:8765/1");
                             }
                         }, 3000);
@@ -231,8 +235,9 @@ $this->layout = false;
                 <?php } else { ?>
                     <h1 id='bj_disagree' style='font-size:150%'>数据异常，3秒后刷新重试……</h1>
                     <script>
-                        setTimeout(function() {
-                            if (document.getElementById("bj").style.display != "none") {
+                        var refresh_bj = setInterval(function() {
+                            setTimeout(function() {}, 0);
+                            if (document.getElementById("qi_bj").style.display == "block") {
                                 window.location.replace("http://www.testingstar.top:8765/2");
                             }
                         }, 3500);
@@ -300,13 +305,13 @@ $this->layout = false;
                 <?php } else { ?>
                     <h1 id='btc_disagree' style='font-size:150%'>数据异常，3秒后刷新重试……</h1>
                     <script>
-                        setTimeout(function() {
-                            if (document.getElementById("xjp").style.display != "none") {
+                        var refresh_btc = setInterval(function() {
+                            setTimeout(function() {}, 0);
+                            if (document.getElementById("qi_xjp").style.display == "block") {
                                 window.location.replace("http://www.testingstar.top:8765/3");
                             }
                         }, 3500);
                     </script>
-
                 <?php } ?>
             </div>
         </div>
@@ -487,6 +492,40 @@ $this->layout = false;
                     </table>
                 </div>
 
+                <script>
+                    var ca_0 = <?= json_encode($ca_data); ?>;
+
+                    var ca_countdown = setInterval(function() {
+                        setTimeout(function() {}, 0);
+                        var now = new Date().getTime();
+                        var distance = "<?= $canext_stamp ?>" - now;
+
+                        if (distance > 210000) {
+                            distance = 210000;
+                        }
+
+                        var minutes = Math.floor(distance / (1000 * 60));
+                        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                        document.getElementById("camin1").innerHTML = Math.floor(minutes / 10);
+                        document.getElementById("camin2").innerHTML = minutes % 10;
+                        document.getElementById("cadivider").innerHTML = ":"
+                        document.getElementById("casec1").innerHTML = Math.floor(seconds / 10);
+                        document.getElementById("casec2").innerHTML = seconds % 10;
+
+                        // If the count down is finished, write some text
+                        if (distance < 0) {
+                            clearInterval(ca_countdown);
+                            document.getElementById("camin1").innerHTML = "开";
+                            document.getElementById("camin2").innerHTML = "奖";
+                            document.getElementById("cadivider").innerHTML = ""
+                            document.getElementById("casec1").innerHTML = "中";
+                            document.getElementById("casec2").innerHTML = "…";
+
+                            setInterval(ca_getdata, 5000);
+                        }
+                    }, 1000);
+                </script>
             <?php } ?>
         </div>
         <div class="main">
@@ -687,6 +726,43 @@ $this->layout = false;
                         </tbody>
                     </table>
                 </div>
+                <script>
+                    var bj_0 = <?= json_encode($bj_data); ?>;
+                    // var bj_init=bj_0.data[0].expect;
+
+                    // bj_display
+                    var bj_countdown = setInterval(function() {
+                        setTimeout(function() {}, 0);
+                        var now = new Date().getTime() + 28800000;
+                        var distance = "<?= $bjnext_stamp ?>" - now;
+
+                        if (distance > 300000) {
+                            distance = 300000;
+                        }
+
+                        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                        document.getElementById("bjmin1").innerHTML = Math.floor(minutes / 10);
+                        document.getElementById("bjmin2").innerHTML = minutes % 10;
+                        document.getElementById("bjdivider").innerHTML = ":"
+                        document.getElementById("bjsec1").innerHTML = Math.floor(seconds / 10);
+                        document.getElementById("bjsec2").innerHTML = seconds % 10;
+
+                        // If the count down is finished, write some text
+                        if (distance < 0) {
+                            clearInterval(bj_countdown);
+                            document.getElementById("bjmin1").innerHTML = "开";
+                            document.getElementById("bjmin2").innerHTML = "奖";
+                            document.getElementById("bjdivider").innerHTML = ""
+                            document.getElementById("bjsec1").innerHTML = "中";
+                            document.getElementById("bjsec2").innerHTML = "…";
+
+                            setInterval(bj_getdata, 5000);
+                        }
+                    }, 1000);
+                </script>
+
             <?php } ?>
         </div>
         <div class="main">
@@ -952,6 +1028,41 @@ $this->layout = false;
                         </tbody>
                     </table>
                 </div>
+                <script>
+                    var btc_0 = <?= json_encode($btc_data); ?>;
+                    // var btc_init=btc_0.data.list[0].drawIssue
+                    // btc1f_display
+                    var btc_countdown = setInterval(function() {
+                        setTimeout(function() {}, 0);
+                        var now = new Date().getTime() + 28800000;
+                        var distance = "<?= $btcnext_stamp ?>" - now;
+
+                        if (distance > 60000) {
+                            distance = 60000;
+                        }
+
+                        var minutes = Math.floor(distance / (1000 * 60));
+                        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                        document.getElementById("btcmin1").innerHTML = Math.floor(minutes / 10);
+                        document.getElementById("btcmin2").innerHTML = minutes % 10;
+                        document.getElementById("btcdivider").innerHTML = ":"
+                        document.getElementById("btcsec1").innerHTML = Math.floor(seconds / 10);
+                        document.getElementById("btcsec2").innerHTML = seconds % 10;
+
+                        // If the count down is finished, write some text
+                        if (distance < 0) {
+                            clearInterval(btc_countdown);
+                            document.getElementById("btcmin1").innerHTML = "开";
+                            document.getElementById("btcmin2").innerHTML = "奖";
+                            document.getElementById("btcdivider").innerHTML = ""
+                            document.getElementById("btcsec1").innerHTML = "中";
+                            document.getElementById("btcsec2").innerHTML = "…";
+
+                            setInterval(btc_getdata, 3000);
+                        }
+                    }, 1000);
+                </script>
             <?php } ?>
         </div>
 
@@ -1020,114 +1131,6 @@ $this->layout = false;
             error: function(XMLHttpRequest, textStatus, errorThrown) {},
         })
     }
-</script>
-
-<script>
-    var ca_0 = <?= json_encode($ca_data); ?>;
-
-    var ca_countdown = setInterval(function() {
-        setTimeout(function() {}, 0);
-        var now = new Date().getTime();
-        var distance = "<?= $canext_stamp ?>" - now;
-
-        if (distance > 210000) {
-            distance = 210000;
-        }
-
-        var minutes = Math.floor(distance / (1000 * 60));
-        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-        document.getElementById("camin1").innerHTML = Math.floor(minutes / 10);
-        document.getElementById("camin2").innerHTML = minutes % 10;
-        document.getElementById("cadivider").innerHTML = ":"
-        document.getElementById("casec1").innerHTML = Math.floor(seconds / 10);
-        document.getElementById("casec2").innerHTML = seconds % 10;
-
-        // If the count down is finished, write some text
-        if (distance < 0) {
-            clearInterval(ca_countdown);
-            document.getElementById("camin1").innerHTML = "开";
-            document.getElementById("camin2").innerHTML = "奖";
-            document.getElementById("cadivider").innerHTML = ""
-            document.getElementById("casec1").innerHTML = "中";
-            document.getElementById("casec2").innerHTML = "…";
-
-            setInterval(ca_getdata, 5000);
-        }
-    }, 1000);
-</script>
-
-<script>
-    var bj_0 = <?= json_encode($bj_data); ?>;
-    // var bj_init=bj_0.data[0].expect;
-
-    // bj_display
-    var bj_countdown = setInterval(function() {
-        setTimeout(function() {}, 0);
-        var now = new Date().getTime() + 28800000;
-        var distance = "<?= $bjnext_stamp ?>" - now;
-
-        if (distance > 300000) {
-            distance = 300000;
-        }
-
-        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-        document.getElementById("bjmin1").innerHTML = Math.floor(minutes / 10);
-        document.getElementById("bjmin2").innerHTML = minutes % 10;
-        document.getElementById("bjdivider").innerHTML = ":"
-        document.getElementById("bjsec1").innerHTML = Math.floor(seconds / 10);
-        document.getElementById("bjsec2").innerHTML = seconds % 10;
-
-        // If the count down is finished, write some text
-        if (distance < 0) {
-            clearInterval(bj_countdown);
-            document.getElementById("bjmin1").innerHTML = "开";
-            document.getElementById("bjmin2").innerHTML = "奖";
-            document.getElementById("bjdivider").innerHTML = ""
-            document.getElementById("bjsec1").innerHTML = "中";
-            document.getElementById("bjsec2").innerHTML = "…";
-
-            setInterval(bj_getdata, 5000);
-        }
-    }, 1000);
-</script>
-
-<script>
-    var btc_0 = <?= json_encode($btc_data); ?>;
-    // var btc_init=btc_0.data.list[0].drawIssue
-    // btc1f_display
-    var btc_countdown = setInterval(function() {
-        setTimeout(function() {}, 0);
-        var now = new Date().getTime() + 28800000;
-        var distance = "<?= $btcnext_stamp ?>" - now;
-
-        if (distance > 60000) {
-            distance = 60000;
-        }
-
-        var minutes = Math.floor(distance / (1000 * 60));
-        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-        document.getElementById("btcmin1").innerHTML = Math.floor(minutes / 10);
-        document.getElementById("btcmin2").innerHTML = minutes % 10;
-        document.getElementById("btcdivider").innerHTML = ":"
-        document.getElementById("btcsec1").innerHTML = Math.floor(seconds / 10);
-        document.getElementById("btcsec2").innerHTML = seconds % 10;
-
-        // If the count down is finished, write some text
-        if (distance < 0) {
-            clearInterval(btc_countdown);
-            document.getElementById("btcmin1").innerHTML = "开";
-            document.getElementById("btcmin2").innerHTML = "奖";
-            document.getElementById("btcdivider").innerHTML = ""
-            document.getElementById("btcsec1").innerHTML = "中";
-            document.getElementById("btcsec2").innerHTML = "…";
-
-            setInterval(btc_getdata, 3000);
-        }
-    }, 1000);
 </script>
 
 </html>
