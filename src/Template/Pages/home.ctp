@@ -365,8 +365,9 @@ $this->layout = false;
                             <tr>
                                 <th>间隔</th>
                                 <th></th>
-                                <?php for ($i = 0; $i < 100 && count($ca_data['data']); $i++) {
+                                <?php 
                                     $ca1 = $ca2 = $ca3 = $ca4 = 0;
+                                    for ($i = 0; $i < 100 && count($ca_data['data']); $i++) {
                                     if (substr($ca_data['data'][$i]['kaijiang'], -2) >= 14) {
                                         if (substr($ca_data['data'][$i]['kaijiang'], -2) % 2 == 0) {
                                             $ca2++;
@@ -589,7 +590,7 @@ $this->layout = false;
                                 <th>间隔</th>
                                 <th></th>
                                 <?php $ca1 = $ca2 = $ca3 = $ca4 = 0;
-                                for ($i = 0; $i < count($bj_data['data']); $i++) {
+                                for ($i = 0; $i<100 && $i < count($bj_data['data']); $i++) {
                                     $k = explode(",", $bj_data['data'][$i]['opencode']);
                                     $l0 = $l1 = $l2 = 0;
                                     for ($j = 0; $j < 6; $j++) {
@@ -823,7 +824,7 @@ $this->layout = false;
                             <tr>
                                 <?php
                                 $bt1 = $bt2 = $bt3 = $bt4 = 0;
-                                for ($i = 0; $i < count($btc_data['data']['list']); $i++) {
+                                for ($i = 0;$i<100 && $i < count($btc_data['data']['list']); $i++) {
                                     if ($btc_data['data']['list'][$i]['result']['pc28_total'] >= 14) {
                                         if ($btc_data['data']['list'][$i]['result']['pc28_total'] % 2 != 0) {
                                             $bt1++;
