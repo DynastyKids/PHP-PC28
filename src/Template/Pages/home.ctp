@@ -30,9 +30,6 @@ if ($btc_data2 == null) {
     $btc_data2 = json_decode(file_get_contents($btc_datasource2), true);
 }
 
-$btc_data=null;
-
-
 if ($ca_data != null) {
     $canext_stamp = $ca_data['data'][0]['time'] + 210000;
     $canext_time = date('Y-m-d H:i:s', $canext_stamp / 1000 + 28800);
