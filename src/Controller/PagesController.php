@@ -40,6 +40,31 @@ class PagesController extends AppController
      *   be found
      * @throws \Cake\View\Exception\MissingTemplateException In debug mode.
      */
+
+    public function home($id=null){
+        if(!file_exists(WWW_ROOT.'init.cfg')){
+            return $this->redirect(['action'=>'initialsetup']);
+        }
+
+        $this->set(compact('id'));
+    }
+
+    public function initialsetup(){
+        if(file_exists(WWW_ROOT.'init.cfg')){
+            return $this->redirect('/');
+        }
+
+        if ($this->request->is('post')) {
+            $info = $this->request->getData();
+            $myfile=fopen(WWW_ROOT.'init.cfg',"w");
+            fwrite($myfile, $info['webadd'].":".$info['webport']);
+            fwrite($myfile,$info['datasource']);
+
+            fclose($myfile);
+            return $this->redirect('/');
+        }
+    }
+
     // public function display(...$path)
     // {
     //     $this->response->withHeader('Access-Control-Allow-Origin', '*');
@@ -68,7 +93,4 @@ class PagesController extends AppController
     //         throw new NotFoundException();
     //     }
     // }
-    public function home($id=null){
-        $this->set(compact('id'));
-    }
 }
