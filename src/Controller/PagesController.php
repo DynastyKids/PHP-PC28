@@ -41,56 +41,32 @@ class PagesController extends AppController
      * @throws \Cake\View\Exception\MissingTemplateException In debug mode.
      */
 
-    public function home($id=null){
-        if(!file_exists(WWW_ROOT.'init.cfg')){
-            return $this->redirect(['action'=>'initialsetup']);
-        }
+     public function display(...$path)
+     {
+         $this->response->withHeader('Access-Control-Allow-Origin', '*');
+         if (!$path) {
+             return $this->redirect('/');
+         }
+         if (in_array('..', $path, true) || in_array('.', $path, true)) {
+             throw new ForbiddenException();
+         }
+         $page = $subpage = null;
 
-        $this->set(compact('id'));
-    }
+         if (!empty($path[0])) {
+             $page = $path[0];
+         }
+         if (!empty($path[1])) {
+             $subpage = $path[1];
+         }
+         $this->set(compact('page', 'subpage'));
 
-    public function initialsetup(){
-        if(file_exists(WWW_ROOT.'init.cfg')){
-            return $this->redirect('/');
-        }
-
-        if ($this->request->is('post')) {
-            $info = $this->request->getData();
-            $myfile=fopen(WWW_ROOT.'init.cfg',"w");
-            fwrite($myfile, $info['webadd'].":".$info['webport']);
-            fwrite($myfile,$info['datasource']);
-
-            fclose($myfile);
-            return $this->redirect('/');
-        }
-    }
-
-    // public function display(...$path)
-    // {
-    //     $this->response->withHeader('Access-Control-Allow-Origin', '*');
-    //     if (!$path) {
-    //         return $this->redirect('/');
-    //     }
-    //     if (in_array('..', $path, true) || in_array('.', $path, true)) {
-    //         throw new ForbiddenException();
-    //     }
-    //     $page = $subpage = null;
-
-    //     if (!empty($path[0])) {
-    //         $page = $path[0];
-    //     }
-    //     if (!empty($path[1])) {
-    //         $subpage = $path[1];
-    //     }
-    //     $this->set(compact('page', 'subpage'));
-
-    //     try {
-    //         $this->render(implode('/', $path));
-    //     } catch (MissingTemplateException $exception) {
-    //         if (Configure::read('debug')) {
-    //             throw $exception;
-    //         }
-    //         throw new NotFoundException();
-    //     }
-    // }
+         try {
+             $this->render(implode('/', $path));
+         } catch (MissingTemplateException $exception) {
+             if (Configure::read('debug')) {
+                 throw $exception;
+             }
+             throw new NotFoundException();
+         }
+     }
 }
