@@ -4,51 +4,35 @@ $hostadd="http://pc28.testingstar.top";
 
 // ini_set('memory_limit', '1024M');
 use Cake\ORM\TableRegistry;
-$datasource_list = json_decode(file_get_contents("https://pastebin.com/raw/jqUCrC2f"),true);
+$datasource_list = json_decode(file_get_contents("https://pastebin.com/raw/TWjgzE83"),true);
 if ($datasource_list == null){
-    $datasource_list = json_decode(file_get_contents("https://pastebin.com/raw/TWjgzE83"),true);
+    $datasource_list = json_decode(file_get_contents("https://pastebin.com/raw/jqUCrC2f"),true);
 }
+$allhistory = file_get_contents($datasource_list['datas']['all']['history'].$key);
+$allpredict = file_get_contents($datasource_list['datas']['all']['predict'].$key);
 
-$ca_history = json_decode(file_get_contents($datasource_list['datas']['ca']['history'].$key), true);
-if ($ca_history == null) {
-    $ca_history = json_decode(file_get_contents("http://data1.testingstar.top/ca/history/" . $key), true);
-}
-$ca_predict = json_decode(file_get_contents($datasource_list['datas']['ca']['predict'].$key),true);
-if($ca_predict == null){
-    $ca_predict = jsondecode(file_get_contents("http://data1.testingstar.top/ca/predict/".$key),true);
-}
+$ca_history = (json_decode($allhistory, true))['Data']['Ca'];
+$ca_predict = (json_decode($allpredict,true))['Data']['Ca'];
 
-$bj_history = json_decode(file_get_contents($datasource_list['datas']['bg']['history'].$key), true);
-if ($bj_history == null) {
-    $bj_history = json_decode(file_get_contents("http://data1.testingstar.top/bg/history/".$key), true);
-}
-$bj_predict = json_decode(file_get_contents($datasource_list['datas']['bg']['predict'].$key),true);
-if ($bj_predict == null){
-    $bj_predict = json_decode(file_get_contents("http://data1.testingstar.top/bg/predict/".$key),true);
-}
+$bj_history = (json_decode($allhistory,true))['Data']['Bg'];
+$bj_predict = (json_decode($allpredict,true))['Data']['Bg'];
 
-$btc_history = json_decode(file_get_contents($datasource_list['datas']['bg']['history'].$key), true);
-if ($btc_history == null) {
-    $btc_history = json_decode(file_get_contents("http://data1.testingstar.top/btc/history/".$key), true);
-}
-$btc_predict = json_decode(file_get_contents($datasource_list['datas']['btc']['predict'].$key),true);
-if($btc_predict == null){
-    json_decode(file_get_contents("http://data1.testingstar.top/btc/predict/".$key),true);
-}
+$btc_history = json_decode($allhistory, true)['Data']['Btc'];
+$btc_predict = json_decode($allpredict,true)['Data']['Btc'];
 
 if ($ca_history != null) {
-    $ca_next_drawtime = strtotime($ca_history['Data'][0]['time'])+210;
+    $ca_next_drawtime = strtotime($ca_history[0]['time'])+210;
 }
 
 if ($bj_history != null) {
-    $bj_next_drawtime = strtotime($bj_history['Data'][0]['time'])+300;
-    if(substr($bj_history['Data'][0]['time'],-5) == "23:55"){
-        $bj_next_drawtime = strtotime($bj_history['Data'][0]['time'])+25800;
+    $bj_next_drawtime = strtotime($bj_history[0]['time'])+300;
+    if(substr($bj_history[0]['time'],-5) == "23:55"){
+        $bj_next_drawtime = strtotime($bj_history[0]['time'])+25800;
     }
 }
 
 if ($btc_history != null) {
-    $btc_next_drawtime = strtotime($btc_history['Data'][0]['time'])+60;
+    $btc_next_drawtime = strtotime($btc_history[0]['time'])+60;
 }
 
 $this->layout = false;
@@ -105,19 +89,19 @@ $this->layout = false;
                 <?php } ?>
             </ul>
             <div id="qi_jnd">
-                <?php if ($ca_history['Data'] != null) { ?>
+                <?php if ($ca_history != null) { ?>
                     <div class="flex_main">
                         <div class="info">
                             <div class="left"><img src="img/qi_jnd.png"></div>
                             <div class="right">
-                                <div class="bt">最新：<span><?= $ca_history['Data'][0]['draw'] ?></span>期</div>
+                                <div class="bt">最新：<span><?= $ca_history[0]['draw'] ?></span>期</div>
                                 <div class="qis_but">
                                     <div class="prev"></div>
                                     <div class="t"></div>
                                     <ul>
-                                        <li class="on"><?= $ca_history['Data'][0]['draw'] ?></li>
-                                        <?php for ($i = 1;$i<15 && $i< count($ca_history['Data']); $i++) {
-                                            echo "<li>". $ca_history['Data'][$i]['draw']."</li>";
+                                        <li class="on"><?= $ca_history[0]['draw'] ?></li>
+                                        <?php for ($i = 1;$i<15 && $i< count($ca_history); $i++) {
+                                            echo "<li>". $ca_history[$i]['draw']."</li>";
                                         } ?>
                                     </ul>
                                     <div class="next"></div>
@@ -135,20 +119,20 @@ $this->layout = false;
                         </div>
                         <div class="line"></div>
                         <dl class="kai">
-                            <dd><?= substr($ca_history['Data'][0]['calc'], 0, 1) ?></dd>
+                            <dd><?= substr($ca_history[0]['calc'], 0, 1) ?></dd>
                             <dt>+</dt>
-                            <dd><?= substr($ca_history['Data'][0]['calc'], 4, 1) ?></dd>
+                            <dd><?= substr($ca_history[0]['calc'], 4, 1) ?></dd>
                             <dt>+</dt>
-                            <dd><?= substr($ca_history['Data'][0]['calc'], 8, 1) ?></dd>
+                            <dd><?= substr($ca_history[0]['calc'], 8, 1) ?></dd>
                             <dt>=</dt>
-                            <dd class="zong"><?= $ca_history['Data'][0]['result'] ?></dd>
+                            <dd class="zong"><?= $ca_history[0]['result'] ?></dd>
                             <dt>
-                                <?php if ($ca_history['Data'][0]['result'] >= 14) {
+                                <?php if ($ca_history[0]['result'] >= 14) {
                                     echo "（ 大 ，";
                                 } else {
                                     echo "（ 小 ，";
                                 } ?>
-                                <?php if ($ca_history['Data'][0]['result'] % 2 == 0) {
+                                <?php if ($ca_history[0]['result'] % 2 == 0) {
                                     echo "双 ）";
                                 } else {
                                     echo "单 ）";
@@ -170,19 +154,19 @@ $this->layout = false;
                 <?php } ?>
             </div>
             <div id="qi_bj">
-                <?php if ($bj_history['Data'] != null) { ?>
+                <?php if ($bj_history != null) { ?>
                     <div class="flex_main">
                         <div class="info">
                             <div class="left"><img src="img/qi_cn.png"></div>
                             <div class="right">
-                                <div class="bt">最新：<span><?= $bj_history['Data'][0]['draw'] ?></span>期</div>
+                                <div class="bt">最新：<span><?= $bj_history[0]['draw'] ?></span>期</div>
                                 <div class="qis_but">
                                     <div class="prev"></div>
-                                    <div class="t"><?= $bj_history['Data'][0]['draw'] ?></div>
+                                    <div class="t"><?= $bj_history[0]['draw'] ?></div>
                                     <ul>
-                                        <li class="on"><?= $bj_history['Data'][0]['draw'] ?></li>
-                                        <?php for ($i = 1; $i < 15 && $i< count($bj_history['Data']); $i++) {
-                                            echo "<li>" . $bj_history['Data'][$i]['draw'] . "</li>";
+                                        <li class="on"><?= $bj_history[0]['draw'] ?></li>
+                                        <?php for ($i = 1; $i < 15 && $i< count($bj_history); $i++) {
+                                            echo "<li>" . $bj_history[$i]['draw'] . "</li>";
                                         } ?>
                                     </ul>
                                     <div class="next"></div>
@@ -200,19 +184,19 @@ $this->layout = false;
                         </div>
                         <div class="line"></div>
                         <dl class="kai">
-                            <dd><?= substr($bj_history['Data'][0]['calc'],0,1)?></dd>
+                            <dd><?= substr($bj_history[0]['calc'],0,1)?></dd>
                             <dt>+</dt>
-                            <dd><?= substr($bj_history['Data'][0]['calc'],4,1)?></dd>
+                            <dd><?= substr($bj_history[0]['calc'],4,1)?></dd>
                             <dt>+</dt>
-                            <dd><?= substr($bj_history['Data'][0]['calc'],-1) ?></dd>
+                            <dd><?= substr($bj_history[0]['calc'],-1) ?></dd>
                             <dt>=</dt>
-                            <dd class="zong"><?= $bj_history['Data'][0]['result'] ?></dd>
-                            <dt><?php if ($bj_history['Data'][0]['result'] >= 14) {
+                            <dd class="zong"><?= $bj_history[0]['result'] ?></dd>
+                            <dt><?php if ($bj_history[0]['result'] >= 14) {
                                     echo "（ 小 ，";
                                 } else {
                                     echo "（ 大 ，";
                                 } ?>
-                                <?php if ($bj_history['Data'][0]['result'] % 2 != 0) {
+                                <?php if ($bj_history[0]['result'] % 2 != 0) {
                                     echo "单 ）";
                                 } else {
                                     echo "双 ）";
@@ -232,19 +216,19 @@ $this->layout = false;
                 <?php } ?>
             </div>
             <div id="qi_xjp">
-                <?php if (count($btc_history['Data'])>0) { ?>
+                <?php if (count($btc_history)>0) { ?>
                     <div class="flex_main">
                         <div class="info">
                             <div class="left"><img src="img/qi_btc.png"></div>
                             <div class="right">
-                                <div class="bt">最新：<span><?= $btc_history['Data'][0]['draw'] ?></span>期</div>
+                                <div class="bt">最新：<span><?= $btc_history[0]['draw'] ?></span>期</div>
                                 <div class="qis_but">
                                     <div class="prev"></div>
-                                    <div class="t"><?= $btc_history['Data'][0]['draw'] ?></div>
+                                    <div class="t"><?= $btc_history[0]['draw'] ?></div>
                                     <ul>
-                                        <li class="on"><?= $btc_history['Data'][0]['draw'] ?></li>
-                                        <?php for ($i = 1; $i<15 && $i < count($btc_history['Data']['draw']); $i++) {
-                                            echo "<li>" . $btc_history['Data'][$i]['draw'] . "</li>";
+                                        <li class="on"><?= $btc_history[0]['draw'] ?></li>
+                                        <?php for ($i = 1; $i<15 && $i < count($btc_history['draw']); $i++) {
+                                            echo "<li>" . $btc_history[$i]['draw'] . "</li>";
                                         }
                                         ?>
                                     </ul>
@@ -263,19 +247,19 @@ $this->layout = false;
                         </div>
                         <div class="line"></div>
                         <dl class="kai">
-                            <dd><?= substr($btc_history['Data'][0]['calc'],0,1) ?></dd>
+                            <dd><?= substr($btc_history[0]['calc'],0,1) ?></dd>
                             <dt>+</dt>
-                            <dd><?= substr($btc_history['Data'][0]['calc'],4,1) ?></dd>
+                            <dd><?= substr($btc_history[0]['calc'],4,1) ?></dd>
                             <dt>+</dt>
-                            <dd><?= substr($btc_history['Data'][0]['calc'], -1) ?></dd>
+                            <dd><?= substr($btc_history[0]['calc'], -1) ?></dd>
                             <dt>=</dt>
-                            <?php $btc_history['Data'][0]['result'] ?>
-                            <dd class="zong"><?= $btc_history['Data'][0]['result'] ?></dd>
+                            <?php $btc_history[0]['result'] ?>
+                            <dd class="zong"><?= $btc_history[0]['result'] ?></dd>
                             <dt>
-                                <?php if ($btc_history['Data'][0]['result'] >= 14) {
+                                <?php if ($btc_history[0]['result'] >= 14) {
                                     echo "（ 小 ，";} else {echo "（ 大 ，";}
                                 ?>
-                                <?php if ($btc_history['Data'][0]['result'] % 2 != 0) {
+                                <?php if ($btc_history[0]['result'] % 2 != 0) {
                                     echo "单 ）";} else {echo "双 ）";}
                                 ?>
                             </dt>
@@ -296,7 +280,7 @@ $this->layout = false;
         </div>
 
         <div class="main">
-            <?php if (count($ca_history['Data'])>0) { ?>
+            <?php if (count($ca_history)>0) { ?>
                 <?php if ($id == 2 || $id == 3) {
                     echo '<div class="bj" id="jnd" style="display:none;">';
                 } else {
@@ -311,11 +295,11 @@ $this->layout = false;
                     <table id="jndtable_jieguo">
                         <thead><tr><th>期号</th><th>时间</th><th>号码</th></tr></thead>
                         <tbody id="jndopencodelist">
-                            <?php for ($i = 0; $i < 100 && $i < count($ca_history['Data']); $i++) { ?>
+                            <?php for ($i = 0; $i < 100 && $i < count($ca_history); $i++) { ?>
                                 <tr>
-                                    <td><?= $ca_history['Data'][$i]['draw'] ?></td>
-                                    <td><?= str_replace("T"," ",$ca_history['Data'][$i]['time'])?></td>
-                                    <td><?= $ca_history['Data'][$i]['calc'].' = '.$ca_history['Data'][$i]['result'] ?></td>
+                                    <td><?= $ca_history[$i]['draw'] ?></td>
+                                    <td><?= str_replace("T"," ",$ca_history[$i]['time'])?></td>
+                                    <td><?= $ca_history[$i]['calc'].' = '.$ca_history[$i]['result'] ?></td>
                                 </tr>
                             <?php } ?>
                         </tbody>
@@ -333,11 +317,11 @@ $this->layout = false;
                                 <th></th>
                                 <?php
                                     $ca1 = $ca2 = $ca3 = $ca4 = 0;
-                                    for ($i = 0; $i < 100 && count($ca_history['Data']); $i++) {
-                                    if ($ca_history['Data'][$i]['result'] >= 14) {
-                                        if ($ca_history['Data'][$i]['result'] % 2 == 0) {$ca2++;} else {$ca1++;}
+                                    for ($i = 0; $i < 100 && count($ca_history); $i++) {
+                                    if ($ca_history[$i]['result'] >= 14) {
+                                        if ($ca_history[$i]['result'] % 2 == 0) {$ca2++;} else {$ca1++;}
                                     } else {
-                                        if ($ca_history['Data'][$i]['result'] % 2 == 0) {$ca4++;} else {$ca3++;}
+                                        if ($ca_history[$i]['result'] % 2 == 0) {$ca4++;} else {$ca3++;}
                                     }
                                 } ?>
                                 <th><?= $ca1 + $ca2 ?></th>
@@ -349,23 +333,23 @@ $this->layout = false;
                                 <th><?= $ca3 ?></th>
                                 <th><?= $ca4 ?></th>
                             </tr>
-                            <?php for ($i = 0; $i < 100 && count($ca_history['Data']); $i++) { ?>
+                            <?php for ($i = 0; $i < 100 && count($ca_history); $i++) { ?>
                                 <tr>
-                                    <td><?= $ca_history['Data'][$i]['draw'] ?></td>
-                                    <td><?= $ca_history['Data'][$i]['result'] ?></td>
-                                    <?php if ($ca_history['Data'][$i]['result'] >= 14) {
+                                    <td><?= $ca_history[$i]['draw'] ?></td>
+                                    <td><?= $ca_history[$i]['result'] ?></td>
+                                    <?php if ($ca_history[$i]['result'] >= 14) {
                                         echo "<td><span class='icon'>大</span></td><td></td>";
                                     } else {
                                         echo "<td></td><td><span class='icon'>小</span></td>";
                                     } ?>
-                                    <?php if ($ca_history['Data'][$i]['result'] % 2 != 0) {
+                                    <?php if ($ca_history[$i]['result'] % 2 != 0) {
                                         echo "<td><span class='icon'>单</span></td><td></td>";
                                     } else {
                                         echo "<td></td><td><span class='icon'>双</span></td>";
                                     } ?>
 
-                                    <?php if ($ca_history['Data'][$i]['result'] >= 14) {
-                                        if ($ca_history['Data'][$i]['result'] % 2 != 0) {
+                                    <?php if ($ca_history[$i]['result'] >= 14) {
+                                        if ($ca_history[$i]['result'] % 2 != 0) {
                                             echo "<td class='er'><span class='icon'>大单</span></td><td class='er'></td>";
                                         } else {
                                             echo "<td class='er'></td><td class='er'><span class='icon'>大双</span></td>";
@@ -373,7 +357,7 @@ $this->layout = false;
                                         echo "<td class='er'></td><td class='er'></td>";
                                     } else {
                                         echo "<td class='er'></td><td class='er'></td>";
-                                        if ($ca_history['Data'][$i]['result'] % 2 != 0) {
+                                        if ($ca_history[$i]['result'] % 2 != 0) {
                                             echo "<td class='er'><span class='icon'>小单</span></td><td class='er'></td>";
                                         } else {
                                             echo "<td class='er'></td><td class='er'><span class='icon'>小双</span></td>";
@@ -396,15 +380,15 @@ $this->layout = false;
                         </thead>
                         <tbody id="jndgameforecastlist">
                             <tr>
-                                <td><?= $ca_history['Data'][0]['draw'] + 1 ?></td>
+                                <td><?= $ca_history[0]['draw'] + 1 ?></td>
                                 <td>--- 预测仅供参考 ---</td>
                                 <td>
-                                    <?php if ($ca_predict['Data'][0]['size'] == 0) {
+                                    <?php if ($ca_predict[0]['size'] == 0) {
                                         echo "小 丨";
                                     } else {
                                         echo "大 丨";
                                     } ?>
-                                    <?php if ($ca_predict['Data'][0]['odd'] == 0) {
+                                    <?php if ($ca_predict[0]['odd'] == 0) {
                                         echo " 单";
                                     } else {
                                         echo " 双";
@@ -412,31 +396,31 @@ $this->layout = false;
                                 </td>
                                 <td></td>
                             </tr>
-                            <?php for ($i = 0; $i < 100 && $i < count($ca_history['Data']); $i++) { ?>
+                            <?php for ($i = 0; $i < 100 && $i < count($ca_history); $i++) { ?>
                                 <tr>
-                                    <td><?= $ca_history['Data'][$i]['draw'] ?></td>
-                                    <td><?= $ca_history['Data'][$i]['calc']." = ".$ca_history['Data'][$i]['result']?></td>
+                                    <td><?= $ca_history[$i]['draw'] ?></td>
+                                    <td><?= $ca_history[$i]['calc']." = ".$ca_history[$i]['result']?></td>
                                     <td>
-                                        <?php if ($ca_predict['Data'][$i + 1]['size'] == 0) {
+                                        <?php if ($ca_predict[$i + 1]['size'] == 0) {
                                             echo "小 丨";
                                         } else {
                                             echo "大 丨";
                                         } ?>
-                                        <?php if ($ca_predict['Data'][$i + 1]['odd'] == 0) {
+                                        <?php if ($ca_predict[$i + 1]['odd'] == 0) {
                                             echo " 单";
                                         } else {
                                             echo " 双";
                                         } ?>
                                     </td>
                                     <td><?php
-                                        $res = $ca_history['Data'][0]['result'];
-                                        if ($res >= 14 &&  $ca_predict['Data'][$i + 1]['size'] == 1) {
+                                        $res = $ca_history[0]['result'];
+                                        if ($res >= 14 &&  $ca_predict[$i + 1]['size'] == 1) {
                                             echo $this->Html->image('icon_yes.png', ['alt' => '']);
-                                        } else if ($res < 14 &&  $ca_predict['Data'][$i + 1]['size'] == 0) {
+                                        } else if ($res < 14 &&  $ca_predict[$i + 1]['size'] == 0) {
                                             echo $this->Html->image('icon_yes.png', ['alt' => '']);
-                                        } else if ($res % 2 == 0 && $ca_predict['Data'][$i + 1]['odd'] == 1) {
+                                        } else if ($res % 2 == 0 && $ca_predict[$i + 1]['odd'] == 1) {
                                             echo $this->Html->image('icon_yes.png', ['alt' => '']);
-                                        } else if ($res % 2 != 0 && $ca_predict['Data'][$i + 1]['odd'] == 0) {
+                                        } else if ($res % 2 != 0 && $ca_predict[$i + 1]['odd'] == 0) {
                                             echo $this->Html->image('icon_yes.png', ['alt' => '']);
                                         } else {
                                             echo $this->Html->image('icon_no.png', ['alt' => '']);
@@ -478,14 +462,14 @@ $this->layout = false;
                             document.getElementById("casec1").innerHTML = "中";
                             document.getElementById("casec2").innerHTML = "…";
 
-                            setInterval(ca_getdata, 5000);
+                            setTimeout(ca_getdata, 5000);
                         }
                     }, 1000);
                 </script>
             <?php } ?>
         </div>
         <div class="main">
-            <?php if ($bj_history['Data'] != null) { ?>
+            <?php if ($bj_history != null) { ?>
                 <?php if ($id == 2) {
                     echo "<div class='bj' id='bj'>";
                 } else {
@@ -506,11 +490,11 @@ $this->layout = false;
                             </tr>
                         </thead>
                         <tbody id="bjopencodelist">
-                            <?php for ($i = 0; $i < count($bj_history['Data']); $i++) { ?>
+                            <?php for ($i = 0; $i < count($bj_history); $i++) { ?>
                                 <tr>
-                                    <td><?= $bj_history['Data'][$i]['draw'] ?></td>
-                                    <td><?= str_replace("T"," ",$bj_history['Data'][$i]['time'])?></td>
-                                    <td><?= $bj_history['Data'][$i]['calc']." = ".$bj_history['Data'][$i]['result']?></td>
+                                    <td><?= $bj_history[$i]['draw'] ?></td>
+                                    <td><?= str_replace("T"," ",$bj_history[$i]['time'])?></td>
+                                    <td><?= $bj_history[$i]['calc']." = ".$bj_history[$i]['result']?></td>
                                 </tr>
                             <?php } ?>
                         </tbody>
@@ -537,11 +521,11 @@ $this->layout = false;
                                 <th>间隔</th>
                                 <th></th>
                                 <?php $ca1 = $ca2 = $ca3 = $ca4 = 0;
-                                for ($i = 0; $i<100 && $i < count($bj_history['Data']); $i++) {
-                                    if ($bj_history['Data'][$i]['result'] < 14) {
-                                        if ($bj_history['Data'][$i]['result'] % 2 == 0) {$ca2++;} else {$ca1++;}
+                                for ($i = 0; $i<100 && $i < count($bj_history); $i++) {
+                                    if ($bj_history[$i]['result'] < 14) {
+                                        if ($bj_history[$i]['result'] % 2 == 0) {$ca2++;} else {$ca1++;}
                                     } else {
-                                        if ($bj_history['Data'][$i]['result'] % 2 == 0) {$ca4++;} else {$ca3++;}
+                                        if ($bj_history[$i]['result'] % 2 == 0) {$ca4++;} else {$ca3++;}
                                     }
                                 } ?>
                                 <th><?= $ca1 + $ca2 ?></th>
@@ -553,22 +537,26 @@ $this->layout = false;
                                 <th><?= $ca3 ?></th>
                                 <th><?= $ca4 ?></th>
                             </tr>
-                            <?php for ($i = 0; $i < 100 && $i < count($bj_history['Data']); $i++) {?>
+                            <?php for ($i = 0; $i < 100 && $i < count($bj_history); $i++) {?>
                                 <tr>
-                                    <td><?= $bj_history['Data'][$i]['draw'] ?></td>
-                                    <td><?= $bj_history['Data'][$i]['result']; ?></td>
-                                    <?php if ($bj_history['Data'][$i]['result'] >= 14) {
-                                        echo "<td><span class='icon'>大</span></td><td></td>";
+                                    <td><?= $bj_history[$i]['draw'] ?></td>
+                                    <td><?= $bj_history[$i]['result']; ?></td>
+                                    <td>
+                                    <?php if ($bj_history[$i]['result'] >= 14) {
+                                        echo "<span class='icon'>大</span></td><td>";
                                     } else {
-                                        echo "<td></td><td><span class='icon'>小</span></td>";
+                                        echo "</td><td><span class='icon'>小</span>";
                                     } ?>
-                                    <?php if ($bj_history['Data'][$i]['result'] % 2 != 0) {
-                                        echo "<td><span class='icon'>单</span></td><td></td>";
+                                    </td>
+                                    <td>
+                                    <?php if ($bj_history[$i]['result'] % 2 != 0) {
+                                        echo "<span class='icon'>单</span></td><td>";
                                     } else {
-                                        echo "<td></td><td><span class='icon'>双</span></td>";
+                                        echo "<td></td><td><span class='icon'>双</span>";
                                     } ?>
-                                    <?php if ($bj_history['Data'][$i]['result'] >= 14) {
-                                        if ($bj_history['Data'][$i]['result'] % 2 != 0) {
+                                    </td>
+                                    <?php if ($bj_history[$i]['result'] >= 14) {
+                                        if ($bj_history[$i]['result'] % 2 != 0) {
                                             echo "<td class='er'><span class='icon'>大单</span></td><td></td>";
                                         } else {
                                             echo "<td></td><td class='er'><span class='icon'>大双</span></td>";
@@ -576,7 +564,7 @@ $this->layout = false;
                                         echo "<td></td><td></td>";
                                     } else {
                                         echo "<td></td><td></td>";
-                                        if ($bj_history['Data'][$i]['result'] % 2 != 0) {
+                                        if ($bj_history[$i]['result'] % 2 != 0) {
                                             echo "<td class='er'><span class='icon'>小单</span></td><td></td>";
                                         } else {
                                             echo "<td></td><td class='er'><span class='icon'>小双</span></td>";
@@ -598,22 +586,22 @@ $this->layout = false;
                             </tr>
                         </thead>
                         <tbody id="bjgameforecastlist">
-                            <?php for ($i = 0; $i < 100 && count($bj_history['Data']); $i++) { ?>
+                            <?php for ($i = 0; $i < 100 && count($bj_history); $i++) { ?>
                                 <tr>
-                                    <td><?= $bj_history['Data'][$i]['draw'] ?></td>
+                                    <td><?= $bj_history[$i]['draw'] ?></td>
                                     <td><?php if ($i == 0) { echo "--- 预测仅供参考 ---";}
-                                        else { echo $bj_history['Data'][$i]['calc']." = ".$bj_history['Data'][$i]['result'];} ?></td>
+                                        else { echo $bj_history[$i]['calc']." = ".$bj_history[$i]['result'];} ?></td>
                                     <td>
-                                        <?php if ($bj_predict['Data'][$i]['size'] == 1) {echo "大 | ";} else {echo "小 | ";} ?>
-                                        <?php if ($bj_predict['Data'][$i]['odd'] == 1) {echo "单";} else {echo "双";} ?>
+                                        <?php if ($bj_predict[$i]['size'] == 1) {echo "大 | ";} else {echo "小 | ";} ?>
+                                        <?php if ($bj_predict[$i]['odd'] == 1) {echo "单";} else {echo "双";} ?>
                                     </td>
                                     <td>
                                         <?php if ($i == 0) {
-                                        } else if ($res % 2 == $bj_predict['Data'][$i]['odd']) {
+                                        } else if ($res % 2 == $bj_predict[$i]['odd']) {
                                             echo $this->Html->image('icon_yes.png', ['alt' => '']);
-                                        } else if ($res < 14 && $bj_predict['Data'][$i]['size'] == 0) {
+                                        } else if ($res < 14 && $bj_predict[$i]['size'] == 0) {
                                             echo $this->Html->image('icon_yes.png', ['alt' => '']);
-                                        } else if ($res >= 14 && $bj_predict['Data'][$i]['size'] == 1) {
+                                        } else if ($res >= 14 && $bj_predict[$i]['size'] == 1) {
                                             echo $this->Html->image('icon_yes.png', ['alt' => '']);
                                         } else {
                                             echo $this->Html->image('icon_no.png', ['alt' => '']);
@@ -678,11 +666,11 @@ $this->layout = false;
                             </tr>
                         </thead>
                         <tbody id="xjpopencodelist">
-                            <?php for ($i = 0; $i < count($btc_history['Data']); $i++) { ?>
+                            <?php for ($i = 0; $i < count($btc_history); $i++) { ?>
                                 <tr>
-                                    <td><?= $btc_history['Data'][$i]['draw'] ?></td>
-                                    <td><?= str_replace("T"," ",$btc_history['Data'][$i]['time']) ?></td>
-                                    <td><?= $btc_history['Data'][$i]['calc']. " = " . $btc_history['Data'][$i]['result'] ?></td>
+                                    <td><?= $btc_history[$i]['draw'] ?></td>
+                                    <td><?= str_replace("T"," ",$btc_history[$i]['time']) ?></td>
+                                    <td><?= $btc_history[$i]['calc']. " = " . $btc_history[$i]['result'] ?></td>
                                 </tr>
                             <?php } ?>
                         </tbody>
@@ -708,11 +696,11 @@ $this->layout = false;
                             <tr>
                                 <?php
                                 $bt1 = $bt2 = $bt3 = $bt4 = 0;
-                                for ($i = 0; $i<100 && $i < count($btc_history['Data']); $i++) {
-                                    if ($btc_history['Data'][$i]['result'] >= 14) {
-                                        if ($btc_history['Data'][$i]['result'] % 2 != 0) {$bt1++;} else {$bt2++;}
+                                for ($i = 0; $i<100 && $i < count($btc_history); $i++) {
+                                    if ($btc_history[$i]['result'] >= 14) {
+                                        if ($btc_history[$i]['result'] % 2 != 0) {$bt1++;} else {$bt2++;}
                                     } else {
-                                        if ($btc_history['Data'][$i]['result'] % 2 != 0) {$bt3++;} else {$bt4++;}
+                                        if ($btc_history[$i]['result'] % 2 != 0) {$bt3++;} else {$bt4++;}
                                     }
                                 } ?>
                                 <th>间隔</th>
@@ -726,29 +714,29 @@ $this->layout = false;
                                 <th><?= $bt3 ?></th>
                                 <th><?= $bt4 ?></th>
                             </tr>
-                            <?php for ($i = 0; $i < count($btc_history['Data']); $i++) { ?>
+                            <?php for ($i = 0; $i < count($btc_history); $i++) { ?>
                                 <tr>
-                                    <td><?= $btc_history['Data'][$i]['draw'] ?></td>
-                                    <td><?= $btc_history['Data'][$i]['result'] ?></td>
-                                    <?php if ($btc_history['Data'][$i]['result'] >= 14) {
+                                    <td><?= $btc_history[$i]['draw'] ?></td>
+                                    <td><?= $btc_history[$i]['result'] ?></td>
+                                    <?php if ($btc_history[$i]['result'] >= 14) {
                                         echo "<td><span class='icon'>大</span></td><td></td>";
                                     } else {
                                         echo "<td></td><td><span class='icon'>小</span></td>";
                                     } ?>
-                                    <?php if ($btc_history['Data'][$i]['result'] % 2 != 0) {
+                                    <?php if ($btc_history[$i]['result'] % 2 != 0) {
                                         echo "<td><span class='icon'>单</span></td><td></td>";
                                     } else {
                                         echo "<td></td><td><span class='icon'>双</span></td>";
                                     } ?>
 
-                                    <?php if ($btc_history['Data'][$i]['result'] >= 14) {
-                                        if ($btc_history['Data'][$i]['result'] % 2 != 0) {
+                                    <?php if ($btc_history[$i]['result'] >= 14) {
+                                        if ($btc_history[$i]['result'] % 2 != 0) {
                                             echo "<td class='er'><span class='icon'>大单</span></td><td></td><td></td><td></td>";
                                         } else {
                                             echo "<td></td><td class='er'><span class='icon'>大双</span></td><td></td><td></td>";
                                         }
                                     } else {
-                                        if ($btc_history['Data'][$i]['result'] % 2 != 0) {
+                                        if ($btc_history[$i]['result'] % 2 != 0) {
                                             echo "<td></td><td></td><td class='er'><span class='icon'>小单</span></td><td></td>";
                                         } else {
                                             echo "<td></td><td></td><td></td><td class='er'><span class='icon'>小双</span></td>";
@@ -771,15 +759,15 @@ $this->layout = false;
                         </thead>
                         <tbody id="xjpgameforecastlist">
                             <tr>
-                                <td><?= $btc_history['Data'][0]['draw'] + 1 ?></td>
+                                <td><?= $btc_history[0]['draw'] + 1 ?></td>
                                 <td>--- 预测仅供参考 ---</td>
                                 <td>
-                                    <?php if ($btc_predict['Data'][0]['size'] == 1) {
+                                    <?php if ($btc_predict[0]['size'] == 1) {
                                         echo "大 | ";
                                     } else {
                                         echo "小 | ";
                                     } ?>
-                                    <?php if ($btc_predict['Data'][0]['odd'] == 1) {
+                                    <?php if ($btc_predict[0]['odd'] == 1) {
                                         echo "单";
                                     } else {
                                         echo "双";
@@ -787,28 +775,28 @@ $this->layout = false;
                                 </td>
                                 <td></td>
                             </tr>
-                            <?php for ($i = 1; $i < count($btc_history['Data']); $i++) { ?>
+                            <?php for ($i = 1; $i < count($btc_history); $i++) { ?>
                                 <tr>
-                                    <td><?= $btc_history['Data'][$i]['draw'] ?></td>
-                                    <td><?= $btc_history['Data'][$i]['calc'].' = '.$btc_history['Data'][$i]['result'] ?></td>
+                                    <td><?= $btc_history[$i]['draw'] ?></td>
+                                    <td><?= $btc_history[$i]['calc'].' = '.$btc_history[$i]['result'] ?></td>
                                     <td>
-                                        <?php if ($btc_predict['Data'][$i + 1]['size'] == 1) {
+                                        <?php if ($btc_predict[$i + 1]['size'] == 1) {
                                             echo "大 | ";
                                         } else {
                                             echo "小 | ";
                                         } ?>
-                                        <?php if ($btc_predict['Data'][$i + 1]['odd'] == 1) {
+                                        <?php if ($btc_predict[$i + 1]['odd'] == 1) {
                                             echo "单";
                                         } else {
                                             echo "双";
                                         } ?>
                                     </td>
                                     <td>
-                                        <?php if ($btc_history['Data'][$i]['result'] % 2 == $btc_predict['Data'][$i]['odd']) {
+                                        <?php if ($btc_history[$i]['result'] % 2 == $btc_predict[$i]['odd']) {
                                             echo $this->Html->image('icon_yes.png', ['alt' => '']);
-                                        } else if ($btc_history['Data'][$i]['result'] < 14 && $btc_predict['Data'][$i]['size'] == 0) {
+                                        } else if ($btc_history[$i]['result'] < 14 && $btc_predict[$i]['size'] == 0) {
                                             echo $this->Html->image('icon_yes.png', ['alt' => '']);
-                                        } else if ($btc_history['Data'][$i]['result'] >= 14 && $btc_predict['Data'][$i]['size'] == 1) {
+                                        } else if ($btc_history[$i]['result'] >= 14 && $btc_predict[$i]['size'] == 1) {
                                             echo $this->Html->image('icon_yes.png', ['alt' => '']);
                                         } else {
                                             echo $this->Html->image('icon_no.png', ['alt' => '']);
@@ -847,7 +835,7 @@ $this->layout = false;
                             document.getElementById("btcsec1").innerHTML = "中";
                             document.getElementById("btcsec2").innerHTML = "…";
 
-                            setInterval(btc_getdata, 3000);
+                            setTimeout(btc_getdata, 3000);
                         }
                     }, 1000);
                 </script>
@@ -862,9 +850,9 @@ $this->layout = false;
 <script>
    function ca_getdata() {
        $.getJSON('<?= $datasource_list['datas']['ca']['latest']?>', function(data) {
-           if(data['Data']!=null) {
-               var got = data['Data'];
-               var logged = <?= $ca_history['Data'][0]['draw']?>;
+           if(data!=null) {
+               var got = data;
+               var logged = <?= $ca_history[0]['draw']?>;
                if(got!=logged && document.getElementById("jnd").style.display != "none"){
                    window.location.replace('<?= $hostadd.'/1'?>');
                }
@@ -875,9 +863,9 @@ $this->layout = false;
 <script>
    function bg_getdata() {
         $.getJSON('<?= $datasource_list['datas']['bg']['latest']?>', function(data) {
-            if(data['Data']!=null) {
-                var got = data['Data'];
-                var logged = <?= $bj_history['Data'][0]['draw']?>;
+            if(data!=null) {
+                var got = data;
+                var logged = <?= $bj_history[0]['draw']?>;
                 if(got!=logged && document.getElementById("bj").style.display != "none"){
                     window.location.replace('<?= $hostadd."/2"?>');
                 }
@@ -888,9 +876,9 @@ $this->layout = false;
 <script>
    function btc_getdata() {
        $.getJSON('<?= $datasource_list['datas']['btc']['latest']?>', function(data) {
-           if(data['Data']!=null) {
-               var got = data['Data'];
-               var logged = <?= $btc_history['Data'][0]['draw']?>;
+           if(data!=null) {
+               var got = data;
+               var logged = <?= $btc_history[0]['draw']?>;
                if(got!=logged && document.getElementById("xjp").style.display != "none"){
                    console.log("Refresh BTC" );
                    window.location.replace('<?= $hostadd."/3"?>');
