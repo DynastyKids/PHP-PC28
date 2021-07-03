@@ -41,6 +41,10 @@ class PagesController extends AppController
      * @throws \Cake\View\Exception\MissingTemplateException In debug mode.
      */
 
+    public function home($id=null){
+        $this->set(compact('id'));
+    }
+
      public function display(...$path)
      {
          $this->response->withHeader('Access-Control-Allow-Origin', '*');

@@ -1,12 +1,12 @@
 <?php
 $key="c5f6c061f4707fbff65263f5ed3d3eb2";
-$webadd="http://pc28.testingstar.top/1";
+$hostadd="http://pc28.testingstar.top";
 
 // ini_set('memory_limit', '1024M');
 use Cake\ORM\TableRegistry;
-$datasource_list = json_decode(file_get_contents("https://pastebin.com/raw/TWjgzE83"),true);
+$datasource_list = json_decode(file_get_contents("https://pastebin.com/raw/jqUCrC2f"),true);
 if ($datasource_list == null){
-    $datasource_list = json_decode(file_get_contents("https://pastebin.com/raw/jqUCrC2f"),true);
+    $datasource_list = json_decode(file_get_contents("https://pastebin.com/raw/TWjgzE83"),true);
 }
 
 $ca_history = json_decode(file_get_contents($datasource_list['datas']['ca']['history'].$key), true);
@@ -163,7 +163,7 @@ $this->layout = false;
                         var refresh_ca = setInterval(function() {
                             setTimeout(function() {}, 0);
                             if (document.getElementById("qi_jnd").style.display == "block") {
-                                window.location.replace(<?= $webadd.'/1'?>);
+                                window.location.replace(<?= $hostadd.'/1'?>);
                             }
                         }, 3000);
                     </script>
@@ -225,7 +225,7 @@ $this->layout = false;
                         var refresh_bj = setInterval(function() {
                             setTimeout(function() {}, 0);
                             if (document.getElementById("qi_bj").style.display == "block") {
-                                window.location.replace(<?= $webadd.'/2'?>);
+                                window.location.replace(<?= $hostadd.'/2'?>);
                             }
                         }, 3500);
                     </script>
@@ -287,7 +287,7 @@ $this->layout = false;
                         var refresh_btc = setInterval(function() {
                             setTimeout(function() {}, 0);
                             if (document.getElementById("qi_xjp").style.display == "block") {
-                                window.location.replace(<?= $webadd.'/3'?>);
+                                window.location.replace(<?= $hostadd.'/3'?>);
                             }
                         }, 3500);
                     </script>
@@ -448,19 +448,20 @@ $this->layout = false;
                 </div>
 
                 <script>
-                    var ca_0 = <?= json_encode($ca_history); ?>;
-
                     var ca_countdown = setInterval(function() {
                         setTimeout(function() {}, 0);
                         var now = new Date().getTime();
-                        var distance = "<?= $ca_next_drawtime*1000 ?>" - now;
+                        now = Math.floor(now/1000);
+                        var nextdraw = <?= $ca_next_drawtime-28800 ?>
 
-                        if (distance > 210000) {
-                            distance = 210000;
+                        var distance = nextdraw-now;
+
+                        if (distance > 210) {
+                            distance = 210;
                         }
 
-                        var minutes = Math.floor(distance / (1000 * 60));
-                        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                        var minutes = Math.floor(distance / 60);
+                        var seconds = Math.floor(distance % 60);
 
                         document.getElementById("camin1").innerHTML = Math.floor(minutes / 10);
                         document.getElementById("camin2").innerHTML = minutes % 10;
@@ -624,20 +625,14 @@ $this->layout = false;
                     </table>
                 </div>
                 <script>
-                    var bj_0 = <?= json_encode($bj_history); ?>;
-
-                    // bj_display
                     var bj_countdown = setInterval(function() {
                         setTimeout(function() {}, 0);
-                        var now = new Date().getTime() + 28800000;
-                        var distance = "<?= $bj_next_drawtime*1000 ?>" - now;
+                        var now = Math.floor(new Date().getTime()/1000) + 28800;
+                        var nextdraw = '<?= $bj_next_drawtime?>'
+                        var distance = nextdraw - now;
 
-                        if (distance > 300000) {
-                            distance = 300000;
-                        }
-
-                        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                        var minutes = Math.floor((distance % (60 * 60)) / 60);
+                        var seconds = Math.floor((distance % 60));
 
                         document.getElementById("bjmin1").innerHTML = Math.floor(minutes / 10);
                         document.getElementById("bjmin2").innerHTML = minutes % 10;
@@ -654,7 +649,7 @@ $this->layout = false;
                             document.getElementById("bjsec1").innerHTML = "中";
                             document.getElementById("bjsec2").innerHTML = "…";
 
-                            setInterval(bj_getdata, 5000);
+                            setInterval(bg_getdata, 5000);
                         }
                     }, 1000);
                 </script>
@@ -825,16 +820,13 @@ $this->layout = false;
                     </table>
                 </div>
                 <script>
-                    var btc_0 = <?= json_encode($btc_history); ?>;
-                    // var btc_init=btc_0.Data.list[0].drawIssue
-                    // btc1f_display
                     var btc_countdown = setInterval(function() {
                         setTimeout(function() {}, 0);
-                        var now = new Date().getTime() + 28800000;
+                        var now = Math.floor(new Date().getTime()/1000) + 28800;
                         var distance = "<?= $btc_next_drawtime ?>" - now;
 
-                        if (distance > 60000) {
-                            distance = 60000;
+                        if (distance > 60) {
+                            distance = 60;
                         }
 
                         var minutes = Math.floor(distance / (1000 * 60));
@@ -868,65 +860,43 @@ $this->layout = false;
 </body>
 
 <script>
-    var ca_0 = <?= json_encode($ca_history); ?>;
-
-    function ca_getdata() {
-        $.ajax({
-            url: "js/1.js",
-            type: "get",
-            dataType: "json",
-            success: function(ca_d) {
-                // console.log(ca_d.Data[0].draw);
-                if (ca_d.Data[0].draw > ca_0.Data[0].draw) {
-                    if (document.getElementById("jnd").style.display != "none") {
-                        window.location.replace(hostadd+"/1");
-                    }
-                }
-            },
-            error: function(XMLHttpRequest, textStatus, errorThrown) {},
-        })
-    }
+   function ca_getdata() {
+       $.getJSON('<?= $datasource_list['datas']['ca']['latest']?>', function(data) {
+           if(data['Data']!=null) {
+               var got = data['Data'];
+               var logged = <?= $ca_history['Data'][0]['draw']?>;
+               if(got!=logged && document.getElementById("jnd").style.display != "none"){
+                   window.location.replace('<?= $hostadd.'/1'?>');
+               }
+           }
+       });
+   }
 </script>
 <script>
-    var bj_0 = <?= json_encode($bj_history); ?>;
-
-    function bj_getdata() {
-        $.ajax({
-            url: "js/2.js",
-            type: "get",
-            dataType: "json",
-            success: function(bj_d) {
-                //console.log(bj_0.Data[0].expect+":"+bj_d.Data[0].expect);
-                if (bj_0.Data[0].expect < bj_d.Data[0].expect) {
-                    if (document.getElementById("bj").style.display != "none") {
-                        window.location.replace(hostadd+"/2");
-                    }
+   function bg_getdata() {
+        $.getJSON('<?= $datasource_list['datas']['bg']['latest']?>', function(data) {
+            if(data['Data']!=null) {
+                var got = data['Data'];
+                var logged = <?= $bj_history['Data'][0]['draw']?>;
+                if(got!=logged && document.getElementById("bj").style.display != "none"){
+                    window.location.replace('<?= $hostadd."/2"?>');
                 }
-            },
-            error: function(XMLHttpRequest, textStatus, errorThrown) {},
-        })
-    }
+            }
+        });
+   }
 </script>
 <script>
-    var btc_0 = <?= json_encode($btc_history); ?>;
-
-    function btc_getdata() {
-        $.ajax({
-            url: "js/3.js",
-            type: "get",
-            dataType: "json",
-            success: function(Data) {
-                // console.log(Data.Data.list[0].drawIssue);
-                if (btc_0.Data.list[0].drawIssue < Data.Data.list[0].drawIssue) {
-                    if (document.getElementById("xjp").style.display != "none") {
-                        window.location.replace(hostadd+"/3");
-                        // window.location='./3';
-                    }
-                }
-            },
-            error: function(XMLHttpRequest, textStatus, errorThrown) {},
-        })
-    }
+   function btc_getdata() {
+       $.getJSON('<?= $datasource_list['datas']['btc']['latest']?>', function(data) {
+           if(data['Data']!=null) {
+               var got = data['Data'];
+               var logged = <?= $btc_history['Data'][0]['draw']?>;
+               if(got!=logged && document.getElementById("xjp").style.display != "none"){
+                   console.log("Refresh BTC" );
+                   window.location.replace('<?= $hostadd."/3"?>');
+               }
+           }
+       });
+   }
 </script>
-
 </html>

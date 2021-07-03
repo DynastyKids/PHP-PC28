@@ -17,7 +17,7 @@ return [
      * Development Mode:
      * true: Errors and warnings shown.
      */
-    'debug' => filter_var(env('DEBUG', true), FILTER_VALIDATE_BOOLEAN),
+    'debug' => filter_var(env('DEBUG', false), FILTER_VALIDATE_BOOLEAN),
 
     /*
      * Configure basic information about the application.
@@ -403,6 +403,6 @@ return [
     ],
 
     'Cors' => [
-        'AllowOrigin' => ['http://localhost', 'http://144.202.119.241:9876','https://365kaik.com']
+        'AllowOrigin' => ['http://localhost', 'http://testingstar.top','pastebin.com']
     ],
 ];
