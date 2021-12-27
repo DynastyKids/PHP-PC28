@@ -541,20 +541,16 @@ $this->layout = false;
                                 <tr>
                                     <td><?= $bj_history[$i]['draw'] ?></td>
                                     <td><?= $bj_history[$i]['result']; ?></td>
-                                    <td>
                                     <?php if ($bj_history[$i]['result'] >= 14) {
-                                        echo "<span class='icon'>大</span></td><td>";
+                                        echo "<td><span class='icon'>大</span></td><td></td>";
                                     } else {
-                                        echo "</td><td><span class='icon'>小</span>";
+                                        echo "<td></td><td><span class='icon'>小</span></td>";
                                     } ?>
-                                    </td>
-                                    <td>
                                     <?php if ($bj_history[$i]['result'] % 2 != 0) {
-                                        echo "<span class='icon'>单</span></td><td>";
+                                        echo "<td><span class='icon'>单</span></td><td></td>";
                                     } else {
                                         echo "<td></td><td><span class='icon'>双</span></td>";
                                     } ?>
-                                    </td>
                                     <?php if ($bj_history[$i]['result'] >= 14) {
                                         if ($bj_history[$i]['result'] % 2 != 0) {
                                             echo "<td class='er'><span class='icon'>大单</span></td><td></td>";
