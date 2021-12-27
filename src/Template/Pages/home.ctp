@@ -552,7 +552,7 @@ $this->layout = false;
                                     <?php if ($bj_history[$i]['result'] % 2 != 0) {
                                         echo "<span class='icon'>单</span></td><td>";
                                     } else {
-                                        echo "<td></td><span class='icon'>双</span>";
+                                        echo "<td></td><td><span class='icon'>双</span></td>";
                                     } ?>
                                     </td>
                                     <?php if ($bj_history[$i]['result'] >= 14) {
