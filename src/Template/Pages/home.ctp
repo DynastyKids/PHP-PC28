@@ -298,7 +298,7 @@ $this->layout = false;
                             <?php for ($i = 0; $i < 100 && $i < count($ca_history); $i++) { ?>
                                 <tr>
                                     <td><?= $ca_history[$i]['draw'] ?></td>
-                                    <td><?= substr(str_replace("T"," ",$ca_history[$i]['time']),0,-6)?></td>
+                                    <td><?= str_replace("T"," ",$ca_history[$i]['time'])?></td>
                                     <td><?= $ca_history[$i]['calc'].' = '.$ca_history[$i]['result'] ?></td>
                                 </tr>
                             <?php } ?>
@@ -493,7 +493,7 @@ $this->layout = false;
                             <?php for ($i = 0; $i < count($bj_history); $i++) { ?>
                                 <tr>
                                     <td><?= $bj_history[$i]['draw'] ?></td>
-                                    <td><?= substr(str_replace("T"," ",$bj_history[$i]['time']),0,-6)?></td>
+                                    <td><?= str_replace("T"," ",$bj_history[$i]['time'])?></td>
                                     <td><?= $bj_history[$i]['calc']." = ".$bj_history[$i]['result']?></td>
                                 </tr>
                             <?php } ?>
@@ -665,7 +665,7 @@ $this->layout = false;
                             <?php for ($i = 0; $i < count($btc_history); $i++) { ?>
                                 <tr>
                                     <td><?= $btc_history[$i]['draw'] ?></td>
-                                    <td><?= substr(str_replace("T"," ",$btc_history[$i]['time']),0,-6)?></td>
+                                    <td><?= str_replace("T"," ",$btc_history[$i]['time'])?></td>
                                     <td><?= $btc_history[$i]['calc']. " = " . $btc_history[$i]['result'] ?></td>
                                 </tr>
                             <?php } ?>
