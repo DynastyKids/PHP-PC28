@@ -1,9 +1,6 @@
 <?php
 $key="c5f6c061f4707fbff65263f5ed3d3eb2";
-$hostadd="http://pc28.testingstar.top";
 
-// ini_set('memory_limit', '1024M');
-use Cake\ORM\TableRegistry;
 $datasource_list = json_decode(file_get_contents("https://pastebin.com/raw/TWjgzE83"),true);
 if ($datasource_list == null){
     $datasource_list = json_decode(file_get_contents("https://pastebin.com/raw/jqUCrC2f"),true);
@@ -147,7 +144,7 @@ $this->layout = false;
                         var refresh_ca = setInterval(function() {
                             setTimeout(function() {}, 0);
                             if (document.getElementById("qi_jnd").style.display == "block") {
-                                window.location.replace(<?= $hostadd.'/1'?>);
+                                window.location.replace(window.location.origin+'/1');
                             }
                         }, 3000);
                     </script>
@@ -209,7 +206,7 @@ $this->layout = false;
                         var refresh_bj = setInterval(function() {
                             setTimeout(function() {}, 0);
                             if (document.getElementById("qi_bj").style.display == "block") {
-                                window.location.replace(<?= $hostadd.'/2'?>);
+                                window.location.replace(window.location.origin+'/2');
                             }
                         }, 3500);
                     </script>
@@ -271,7 +268,7 @@ $this->layout = false;
                         var refresh_btc = setInterval(function() {
                             setTimeout(function() {}, 0);
                             if (document.getElementById("qi_xjp").style.display == "block") {
-                                window.location.replace(<?= $hostadd.'/3'?>);
+                                window.location.replace(window.location.origin+'/3');
                             }
                         }, 3500);
                     </script>
@@ -850,7 +847,7 @@ $this->layout = false;
                var got = data;
                var logged = <?= $ca_history[0]['draw']?>;
                if(got!=logged && document.getElementById("jnd").style.display != "none"){
-                   window.location.replace('<?= $hostadd.'/1'?>');
+                   window.location.replace(window.location.origin+'/1');
                }
            }
        });
@@ -863,7 +860,7 @@ $this->layout = false;
                 var got = data;
                 var logged = <?= $bj_history[0]['draw']?>;
                 if(got!=logged && document.getElementById("bj").style.display != "none"){
-                    window.location.replace('<?= $hostadd."/2"?>');
+                    window.location.replace(window.location.origin+"/2");
                 }
             }
         });
@@ -876,8 +873,7 @@ $this->layout = false;
                var got = data;
                var logged = <?= $btc_history[0]['draw']?>;
                if(got!=logged && document.getElementById("xjp").style.display != "none"){
-                   console.log("Refresh BTC" );
-                   window.location.replace('<?= $hostadd."/3"?>');
+                   window.location.replace(window.location.origin+"/3");
                }
            }
        });
