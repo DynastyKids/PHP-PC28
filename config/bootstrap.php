@@ -201,3 +201,8 @@ Type::build('timestamp')
 //Inflector::rules('irregular', ['red' => 'redlings']);
 //Inflector::rules('uninflected', ['dontinflectme']);
 //Inflector::rules('transliteration', ['/å/' => 'aa']);
+
+/*
+ *  在此填写你的数据密钥
+ */
+Configure::write('DataKey','Replace_with_your_key');

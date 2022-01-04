@@ -1,5 +1,6 @@
 <?php
-$key="c5f6c061f4707fbff65263f5ed3d3eb2";
+use Cake\Core\Configure;
+$key=Configure::read('DataKey');
 
 $datasource_list = json_decode(file_get_contents("https://pastebin.com/raw/TWjgzE83"),true);
 if ($datasource_list == null){
@@ -31,7 +32,6 @@ if ($bj_history != null) {
 if ($btc_history != null) {
     $btc_next_drawtime = strtotime($btc_history[0]['time'])+60;
 }
-
 $this->layout = false;
 ?>
 <!DOCTYPE html>
